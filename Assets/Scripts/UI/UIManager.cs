@@ -4,6 +4,8 @@ public class UIManager : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject inventory;
+    public Inventory playerInventory;
+    public CombineSystem combineSystem;
 
     private bool isPaused = false;
 
@@ -30,5 +32,7 @@ public class UIManager : MonoBehaviour
     {        
         inventory.SetActive(!inventory.activeSelf);
         Cursor.lockState = inventory.activeSelf ? CursorLockMode.None : CursorLockMode.Locked; //if inventory open, unlock cursor
+        playerInventory.ResetUI();
+        combineSystem.ResetCombineSystem();
     }
 }

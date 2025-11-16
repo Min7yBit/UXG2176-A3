@@ -7,8 +7,13 @@ public class Inventory : MonoBehaviour
     private List<InventorySlot> inventorySlotsUI;
     [SerializeField] private int maxInventorySize = 20;
 
+    public CombineSystem combineSystem;
     public Item test1;
     public Item test2;
+    public Item test3;
+    public Item test4;
+    public Item test5;
+        
     private void Awake()
     {
         inventoryList = new List<Item>();
@@ -28,6 +33,9 @@ public class Inventory : MonoBehaviour
         }
         AddItem(test1);
         AddItem(test2);  
+        AddItem(test3);
+        AddItem(test4);
+        AddItem(test5);
     }
 
     private void Update()
@@ -71,6 +79,44 @@ public class Inventory : MonoBehaviour
         {
             inventorySlotsUI[i].SetItem(inventoryList[i]);
         }
+    }
+
+    public void CombineItems()
+    {
+        if (!combineSystem.readyToCombine)
+            return;
+
+        //remove combined items from inventory
+        for (int i = inventoryList.Count - 1; i >= 0; i--)
+        {
+            var item = inventoryList[i];
+
+            if (item is CombinableItem combinableItem &&
+                combinableItem.AddedToCombine)
+            {
+                RemoveItem(item); // safe now
+            }
+        }
+
+        //reset all slot UIs
+        foreach (var slot in inventorySlotsUI)
+        {
+            slot.ResetSlotSelectedUI();
+        }
+
+        //add the result item
+        Item result = combineSystem.combinedItem;
+        AddItem(result);
+
+        combineSystem.ResetCombineSystem();
+    }
+    public void ResetUI()
+    {
+        foreach (var slot in inventorySlotsUI)
+        {
+            slot.ResetSlotSelectedUI();
+        }
+        RefreshUI();
     }
 }
 
