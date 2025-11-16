@@ -6,7 +6,6 @@ public class InventorySlot : MonoBehaviour
     private Inventory inventory;
     public Item currentItem; // The item in this slot
     public Image icon;       // UI Image showing the item
-
     private void Awake()
     {
         inventory = GetComponentInParent<Inventory>();
