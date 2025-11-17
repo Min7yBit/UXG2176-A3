@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
 {
-    private Inventory inventory;
+    [SerializeField]private Inventory inventory;
     public Item currentItem; // The item in this slot
     public Image icon;       // UI Image showing the item
 
@@ -12,7 +12,6 @@ public class InventorySlot : MonoBehaviour
     public Vector2 cursorHotspotOffset = Vector2.zero; // Hotspot offset for the cursor
     private void Awake()
     {
-        inventory = GetComponentInParent<Inventory>();
     }
 
     public void SetItem(Item item)

@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; // Prevent physics from rotating the player
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 

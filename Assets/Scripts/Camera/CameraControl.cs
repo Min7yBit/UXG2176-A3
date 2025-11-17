@@ -38,7 +38,9 @@ public class CameraControl : MonoBehaviour
         thirdPersonCam.enabled = (mode == CameraMode.ThirdPerson);
 
         if (mode == CameraMode.Fixed && activeFixedCam != null)
+        {
             activeFixedCam.enabled = true;
+        }
         else
         {
             // disable all fixed cams

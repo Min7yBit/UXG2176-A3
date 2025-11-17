@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private List<Item> inventoryList;
+    [SerializeField] private List<Item> inventoryList;
     private List<InventorySlot> inventorySlotsUI;
     [SerializeField] private int maxInventorySize = 20;
+    [SerializeField] Transform invSlotTransform;
+    [SerializeField] Transform inventoryUIParent;
 
     public CombineSystem combineSystem;
     public Item test1;
@@ -23,7 +25,7 @@ public class Inventory : MonoBehaviour
     }
     private void Start()
     {
-        foreach (Transform child in transform)
+        foreach (Transform child in invSlotTransform)
         {
             InventorySlot slot = child.GetComponent<InventorySlot>();
             if (slot != null)
@@ -31,6 +33,7 @@ public class Inventory : MonoBehaviour
                 inventorySlotsUI.Add(slot);
             }
         }
+        inventoryUIParent.gameObject.SetActive(false);
         AddItem(test1);
         AddItem(test2);  
         AddItem(test3);
@@ -117,6 +120,18 @@ public class Inventory : MonoBehaviour
             slot.ResetSlotSelectedUI();
         }
         RefreshUI();
+    }
+
+    public bool ContainsItem(string name)
+    {
+        foreach(Item i in inventoryList)
+        {
+            if(i.name == name)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
