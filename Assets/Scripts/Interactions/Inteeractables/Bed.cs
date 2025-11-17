@@ -20,6 +20,7 @@ public class Bed : MonoBehaviour,IInteractable
     public void OnInteract(in PlayerMovement playerMovement)
     {
         interactable = false;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         this.playerMovement = playerMovement;
         this.playerMovement.CanMove = false;
@@ -30,6 +31,7 @@ public class Bed : MonoBehaviour,IInteractable
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             interactable = true;
             playerMovement.CanMove = true;
