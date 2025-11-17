@@ -13,7 +13,7 @@ public class TestInteractable : MonoBehaviour, IInteractable
         return transform;
     }
 
-    public void OnInteract()
+    public void OnInteract(in PlayerMovement playerMovement)
     {
         Debug.Log("Interacted with " + name);
     }

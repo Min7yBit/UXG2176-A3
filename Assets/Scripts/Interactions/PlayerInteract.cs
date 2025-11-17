@@ -13,7 +13,12 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private Image interactPrompImage;
     [SerializeField] private LayerMask interactLayerMask;
 
+    private PlayerMovement playerMovement;
 
+    private void Start()
+    {
+        playerMovement = gameObject.GetComponent<PlayerMovement>(); 
+    }
 
     private void Update()
     {
@@ -27,10 +32,10 @@ public class PlayerInteract : MonoBehaviour
                 interactPrompt.text = "Press E to Interact";
                 interactPromptGO.SetActive(true);
             }
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
 
-                interactable.OnInteract();
+                interactable.OnInteract(playerMovement);
             }
 
         }

@@ -1,13 +1,18 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CameraControl : MonoBehaviour
 {
     public enum CameraMode { FirstPerson, ThirdPerson, Fixed }
     public CameraMode currentMode = CameraMode.ThirdPerson;
 
+    public List<Camera> thirdPersonCameras = new List<Camera>();
+
     public Camera firstPersonCam;
     public Camera thirdPersonCam;
     public Camera activeFixedCam;
+
+
 
     void Start()
     {
@@ -37,7 +42,7 @@ public class CameraControl : MonoBehaviour
         else
         {
             // disable all fixed cams
-            foreach (var cam in FindObjectsOfType<Camera>())
+            foreach (var cam in FindObjectsByType<Camera>(FindObjectsSortMode.None))
             {
                 if (cam.CompareTag("FixedCamera"))
                     cam.enabled = false;
