@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class CombinableItem : Item, ICombinable
 {
@@ -9,3 +9,4 @@ public class CombinableItem : Item, ICombinable
 
     }
 }
+*/

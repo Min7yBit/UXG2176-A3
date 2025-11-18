@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -136,4 +136,4 @@ public class ItemRecipe
     public Item inputA;
     public Item inputB;
     public Item result;
-}
+}*/

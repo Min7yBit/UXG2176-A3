@@ -4,12 +4,13 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [SerializeField] private List<Item> inventoryList;
-    private List<InventorySlot> inventorySlotsUI;
-    [SerializeField] private int maxInventorySize = 20;
+    private List<InventorySlot> inventorySlots;
+    [SerializeField] private int maxInventorySize = 8;
     [SerializeField] Transform invSlotTransform;
     [SerializeField] Transform inventoryUIParent;
+    [SerializeField] private int currentSelectedSlotIndex = 0;
 
-    public CombineSystem combineSystem;
+    //public CombineSystem combineSystem;
     public Item test1;
     public Item test2;
     public Item test3;
@@ -20,8 +21,8 @@ public class Inventory : MonoBehaviour
     {
         inventoryList = new List<Item>();
         inventoryList.Clear();
-        inventorySlotsUI = new List<InventorySlot>();
-        inventorySlotsUI.Clear();
+        inventorySlots = new List<InventorySlot>();
+        inventorySlots.Clear();
     }
     private void Start()
     {
@@ -30,15 +31,17 @@ public class Inventory : MonoBehaviour
             InventorySlot slot = child.GetComponent<InventorySlot>();
             if (slot != null)
             {
-                inventorySlotsUI.Add(slot);
+                inventorySlots.Add(slot);
             }
         }
-        inventoryUIParent.gameObject.SetActive(false);
+        //inventoryUIParent.gameObject.SetActive(false);
         AddItem(test1);
         AddItem(test2);  
         AddItem(test3);
         AddItem(test4);
         AddItem(test5);
+
+        inventorySlots[currentSelectedSlotIndex].SelectToggle(); //initiate first slot as selected
     }
 
     private void Update()
@@ -46,6 +49,21 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             RefreshUI();
+        }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (currentSelectedSlotIndex >= maxInventorySize - 1) //for resetting to first slot
+            {
+                inventorySlots[currentSelectedSlotIndex].SelectToggle();
+                currentSelectedSlotIndex = 0;
+                inventorySlots[currentSelectedSlotIndex].SelectToggle();
+            }
+            else
+            {
+                inventorySlots[currentSelectedSlotIndex++].SelectToggle();
+                inventorySlots[currentSelectedSlotIndex].SelectToggle();
+            }
+
         }
     }
     public void AddItem(Item newItem)
@@ -72,19 +90,19 @@ public class Inventory : MonoBehaviour
     {
         Debug.Log("Refreshing Inventory UI...");
         //clear all slots first
-        foreach (var slot in inventorySlotsUI)
+        foreach (var slot in inventorySlots)
         {
             slot.SetItem(null);
         }
 
         //populate slots with current items
-        for (int i = 0; i < inventoryList.Count && i < inventorySlotsUI.Count; i++)
+        for (int i = 0; i < inventoryList.Count && i < inventorySlots.Count; i++)
         {
-            inventorySlotsUI[i].SetItem(inventoryList[i]);
+            inventorySlots[i].SetItem(inventoryList[i]);
         }
     }
 
-    public void CombineItems()
+/*    public void CombineItems()
     {
         if (!combineSystem.readyToCombine)
             return;
@@ -112,21 +130,13 @@ public class Inventory : MonoBehaviour
         AddItem(result);
 
         combineSystem.ResetCombineSystem();
-    }
-    public void ResetUI()
-    {
-        foreach (var slot in inventorySlotsUI)
-        {
-            slot.ResetSlotSelectedUI();
-        }
-        RefreshUI();
-    }
+    }*/
 
     public bool ContainsItem(string name)
     {
-        foreach(Item i in inventoryList)
+        foreach(InventorySlot i in inventorySlots)
         {
-            if(i.name == name)
+            if(i.isSelected == true && i.currentItem.itemName == name)
             {
                 return true;
             }

@@ -3,9 +3,9 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public GameObject pauseMenu;
-    public GameObject inventory;
-    public Inventory playerInventory;
-    public CombineSystem combineSystem;
+    //public GameObject inventory;
+    //public Inventory playerInventory;
+    //public CombineSystem combineSystem;
 
     private bool isPaused = false;
 
@@ -14,20 +14,20 @@ public class UIManager : MonoBehaviour
         // ESC behaviour: close inventory first, pause second
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (inventory.activeSelf)
+/*            if (inventory.activeSelf)
             {
                 ToggleInventory();
                 return;
-            }
+            }*/
 
             TogglePauseMenu();
         }
 
-        // I key (only allowed when not paused)
+/*        // I key (only allowed when not paused)
         if (Input.GetKeyDown(KeyCode.I) && !isPaused)
         {
             ToggleInventory();
-        }
+        }*/
     }
 
     public void TogglePauseMenu()
@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
         Cursor.visible = isPaused;
     }
 
-    public void ToggleInventory()
+/*    public void ToggleInventory()
     {
         bool newState = !inventory.activeSelf;
 
@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour
         if (newState)
         {
             playerInventory.ResetUI();
-            combineSystem.ResetCombineSystem();
+            //combineSystem.ResetCombineSystem();
         }
-    }
+    }*/
 }
