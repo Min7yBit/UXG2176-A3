@@ -11,11 +11,6 @@ public class Inventory : MonoBehaviour
     [SerializeField] private int currentSelectedSlotIndex = 0;
 
     //public CombineSystem combineSystem;
-    public Item test1;
-    public Item test2;
-    public Item test3;
-    public Item test4;
-    public Item test5;
         
     private void Awake()
     {
@@ -34,12 +29,6 @@ public class Inventory : MonoBehaviour
                 inventorySlots.Add(slot);
             }
         }
-        //inventoryUIParent.gameObject.SetActive(false);
-        AddItem(test1);
-        AddItem(test2);  
-        AddItem(test3);
-        AddItem(test4);
-        AddItem(test5);
 
         inventorySlots[currentSelectedSlotIndex].SelectToggle(); //initiate first slot as selected
     }
@@ -136,7 +125,10 @@ public class Inventory : MonoBehaviour
     {
         foreach(InventorySlot i in inventorySlots)
         {
-            if(i.isSelected == true && i.currentItem.itemName == name)
+            if (i.currentItem == null)
+                continue;
+
+            if (i.isSelected == true && i.currentItem.itemName == name)
             {
                 return true;
             }

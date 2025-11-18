@@ -16,6 +16,10 @@ public class TestInteractable : MonoBehaviour, IInteractable
     public void OnInteract(in PlayerMovement playerMovement)
     {
         Debug.Log("Interacted with " + name);
+
+        Item item = GetComponent<Item>();
+        if (item != null)
+            playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
     }
 
 
