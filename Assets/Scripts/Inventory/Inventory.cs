@@ -71,6 +71,7 @@ public class Inventory : MonoBehaviour
         if (inventoryList.Remove(itemToRemove))
         {
             Debug.Log($"Removed {itemToRemove.itemName} from inventory.");
+            RefreshUI();
             return;
         }
         Debug.Log($"{itemToRemove.itemName} not found in inventory.");
@@ -89,6 +90,11 @@ public class Inventory : MonoBehaviour
         {
             inventorySlots[i].SetItem(inventoryList[i]);
         }
+
+        //reset selected slot to first slot
+        inventorySlots[currentSelectedSlotIndex].SelectToggle();
+        currentSelectedSlotIndex = 0;
+        inventorySlots[currentSelectedSlotIndex].SelectToggle();
     }
 
 /*    public void CombineItems()
@@ -120,7 +126,17 @@ public class Inventory : MonoBehaviour
 
         combineSystem.ResetCombineSystem();
     }*/
-
+    public Item GetItem(string name)
+    {
+        foreach (Item item in inventoryList)
+        {
+            if (item.itemName == name)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
     public bool ContainsItem(string name)
     {
         foreach(InventorySlot i in inventorySlots)

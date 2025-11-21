@@ -1,36 +1,47 @@
 using UnityEngine;
 
-public class Screw : MonoBehaviour
+public class Screw : MonoBehaviour, IInteractable
 {
+    public string Name => name;
+    public bool canInteract { get => interactable; set { interactable = value; } }
 
-    private Renderer Rrenderer;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public string itemName;
+    [SerializeField]private BedLeg bedLeg;
+
+    private bool interactable = true;
+    private bool mouseOver = false;
+    [SerializeField] private Inventory inventory;
+
+    public Transform GetTransform()
     {
-        Rrenderer = GetComponent<Renderer>();
+        return transform;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnMouseEnter()
     {
-        Rrenderer.material.color = Color.yellow;
+        Debug.Log("Mouse Entered Bed Clickable Area");
+        mouseOver = true;
     }
-
-    private void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Collect Screw");
-        }
-    }
-
     private void OnMouseExit()
     {
-        Rrenderer.material.color= Color.white;
+        Debug.Log("Mouse Exited Bed Clickable Area");
+        mouseOver = false;
+    }
+
+    public void OnInteract(in PlayerMovement playerMovement)
+    {
+        if (!interactable || !mouseOver)
+            return;
+        if (inventory.ContainsItem(itemName))
+        {
+            inventory.RemoveItem(inventory.GetItem(itemName));
+            Debug.Log("Screw Removed");
+            interactable = false;
+            bedLeg.canRemove = true;
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Cannot Remove screw, required item not present");
+        }
     }
 }

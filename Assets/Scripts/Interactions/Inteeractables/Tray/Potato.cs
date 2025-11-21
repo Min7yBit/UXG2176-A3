@@ -46,8 +46,6 @@ public class Potato : MonoBehaviour, IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        Debug.Log("Interactable Bool: " + interactable);
-        Debug.Log("MouseOver Bool: " + mouseOver);
         if (!interactable || !mouseOver)
             return;
 

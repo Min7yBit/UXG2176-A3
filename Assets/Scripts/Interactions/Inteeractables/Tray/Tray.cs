@@ -9,12 +9,15 @@ public class Tray : MonoBehaviour, IInteractable
     public CameraControl cameraControl;
     public Camera cam;
 
+/*    private Renderer Rrenderer;
+    private bool mouseOver = false;*/
     private bool interactable = true;
     private PlayerMovement playerMovement;
     [SerializeField]private List<Transform> childTransforms;
 
     private void Awake()
     {
+        //Rrenderer = GetComponent<Renderer>();
         InitiateTransformList();
     }
 
@@ -22,8 +25,22 @@ public class Tray : MonoBehaviour, IInteractable
     {
         return transform;
     }
+/*    private void OnMouseEnter()
+    {
+        Debug.Log("Mouse Entered Tray");
+        Rrenderer.material.color = Color.yellow;
+        mouseOver = true;
+    }
+    private void OnMouseExit()
+    {
+        Debug.Log("Mouse Exited Tray");
+        Rrenderer.material.color = Color.white;
+        mouseOver = false;
+    }*/
     public void OnInteract(in PlayerMovement playerMovement)
     {
+/*        if (!mouseOver)
+            return;*/
         EnableChildInteraction();
         interactable = false;
         Cursor.lockState = CursorLockMode.None;
