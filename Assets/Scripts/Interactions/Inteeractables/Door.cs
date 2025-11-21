@@ -3,7 +3,7 @@ using UnityEngine;
 public class Door : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract => interactable;
+    public bool canInteract { get => interactable; set { interactable = value; } }
 
     public string itemName;
 

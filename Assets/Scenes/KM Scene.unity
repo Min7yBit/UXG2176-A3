@@ -1528,6 +1528,7 @@ GameObject:
   - component: {fileID: 390939651}
   - component: {fileID: 390939650}
   - component: {fileID: 390939649}
+  - component: {fileID: 390939652}
   m_Layer: 0
   m_Name: Potato
   m_TagString: Untagged
@@ -1569,10 +1570,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0892334
-  m_Height: 0.247226
+  m_Radius: 0.116967395
+  m_Height: 0.3003235
   m_Direction: 1
-  m_Center: {x: 0.0016656079, y: 1.789163, z: -4.401392}
+  m_Center: {x: 0.0016617322, y: 1.7948122, z: -4.398726}
 --- !u!23 &390939650
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1626,6 +1627,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 390939647}
   m_Mesh: {fileID: -2432090755550338912, guid: fd2384857c5ccb94eb4925b40c351dcc, type: 3}
+--- !u!114 &390939652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390939647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 642087e599c6fea40b609f542a77e996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomDuration: 0.5
+  zoomedPosition: {x: 14.48, y: -8.46, z: 45.98}
+  rotatePosition: {x: -0.33370864, y: -0.6234088, z: 0.60985804, w: 0.3578732}
+  interactable: 1
 --- !u!1 &483719863
 GameObject:
   m_ObjectHideFlags: 0
@@ -1675,7 +1692,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -3770,14 +3787,14 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.48806906
-  m_Height: 0.044375002
-  m_Direction: 1
-  m_Center: {x: -0.222874, y: 0.56793547, z: -3.5746431}
+  m_Radius: 0.46721572
+  m_Height: 1.3439988
+  m_Direction: 2
+  m_Center: {x: -0.22287369, y: 0.54708475, z: -3.574643}
 --- !u!23 &861724881
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3845,6 +3862,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1543531051}
+  childTransforms: []
 --- !u!1 &864219890
 GameObject:
   m_ObjectHideFlags: 0
@@ -4450,7 +4468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fab0c6d1d7bc94468a6770dc87fe322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: 1
+  interactable: 0
 --- !u!1 &981590062
 GameObject:
   m_ObjectHideFlags: 0
@@ -5853,7 +5871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fab0c6d1d7bc94468a6770dc87fe322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: 1
+  interactable: 0
 --- !u!1 &1422208280
 GameObject:
   m_ObjectHideFlags: 0
@@ -7965,10 +7983,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.25360495
-  m_Height: 0.050388
-  m_Direction: 1
-  m_Center: {x: -1.4646865, y: 0.025481, z: 2.097239}
+  m_Radius: 0.06738882
+  m_Height: 0.5232262
+  m_Direction: 2
+  m_Center: {x: -1.4698449, y: 0.02548101, z: 2.105204}
 --- !u!23 &1756740605
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8034,7 +8052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fab0c6d1d7bc94468a6770dc87fe322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: 1
+  interactable: 0
 --- !u!114 &1756740608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9312,7 +9330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fab0c6d1d7bc94468a6770dc87fe322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: 1
+  interactable: 0
 --- !u!1 &1998969002
 GameObject:
   m_ObjectHideFlags: 0
@@ -9630,7 +9648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fab0c6d1d7bc94468a6770dc87fe322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: 1
+  interactable: 0
 --- !u!1 &2053271018
 GameObject:
   m_ObjectHideFlags: 0
@@ -9854,7 +9872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fab0c6d1d7bc94468a6770dc87fe322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interact: 1
+  interactable: 0
 --- !u!1 &2139399826
 GameObject:
   m_ObjectHideFlags: 0
