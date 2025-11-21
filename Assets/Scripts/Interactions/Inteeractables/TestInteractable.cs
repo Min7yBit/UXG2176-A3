@@ -6,16 +6,36 @@ public class TestInteractable : MonoBehaviour, IInteractable
 
     public bool canInteract { get => interactable; set { interactable = value; } }
 
-    public bool interactable;    
-
+    public bool interactable;
+    private Renderer Rrenderer;
+    private bool mouseOver = false;
+    private void Awake()
+    {
+        Rrenderer = GetComponent<Renderer>();
+    }
     public Transform GetTransform()
     {
         return transform;
     }
-
-    public void OnInteract(in PlayerMovement playerMovement)
+    private void OnMouseEnter()
     {
         if (!interactable)
+            return;
+        Debug.Log("Mouse Entered " + name);
+        Rrenderer.material.color = Color.yellow;
+        mouseOver = true;
+    }
+    private void OnMouseExit()
+    {
+        if (!interactable)
+            return;
+        Debug.Log("Mouse Exited " + name);
+        Rrenderer.material.color = Color.white;
+        mouseOver = false;
+    }
+    public void OnInteract(in PlayerMovement playerMovement)
+    {
+        if (!interactable || !mouseOver)
             return;
         Debug.Log("Interacted with " + name);
 

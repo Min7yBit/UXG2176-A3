@@ -22,7 +22,6 @@ public class Tray : MonoBehaviour, IInteractable
     {
         return transform;
     }
-
     public void OnInteract(in PlayerMovement playerMovement)
     {
         EnableChildInteraction();

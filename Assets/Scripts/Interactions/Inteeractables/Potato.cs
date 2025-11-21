@@ -13,9 +13,15 @@ public class Potato : MonoBehaviour, IInteractable
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
-    [SerializeField] private bool interactable = true;
+    private Renderer Rrenderer;
+    private bool mouseOver = false;
+    private bool interactable = true;
     private bool zoomedIn = false;
     private bool allowRotation = false;
+    private void Awake()
+    {
+        Rrenderer = GetComponent<Renderer>();
+    }
     private void Start()
     {
         initialPosition = transform.position;
@@ -25,13 +31,25 @@ public class Potato : MonoBehaviour, IInteractable
     {
         return transform;
     }
+    private void OnMouseEnter()
+    {
+        Debug.Log("Mouse Entered Potato");
+        Rrenderer.material.color = Color.yellow;
+        mouseOver = true;
+    }
+    private void OnMouseExit()
+    {
+        Debug.Log("Mouse Exited Potato");
+        Rrenderer.material.color = Color.white;
+        mouseOver = false;
+    }
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        Debug.Log("CLicked potato");
-        if (!interactable)
+        Debug.Log("Interactable Bool: " + interactable);
+        Debug.Log("MouseOver Bool: " + mouseOver);
+        if (!interactable || !mouseOver)
             return;
-        Debug.Log("Interacted with Potato");
 
         if (zoomedIn)
         {

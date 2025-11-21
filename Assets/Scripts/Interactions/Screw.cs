@@ -3,11 +3,11 @@ using UnityEngine;
 public class Screw : MonoBehaviour
 {
 
-    private Renderer renderer;
+    private Renderer Rrenderer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        renderer = GetComponent<Renderer>();
+        Rrenderer = GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -18,7 +18,7 @@ public class Screw : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        renderer.material.color = Color.yellow;
+        Rrenderer.material.color = Color.yellow;
     }
 
     private void OnMouseOver()
@@ -31,6 +31,6 @@ public class Screw : MonoBehaviour
 
     private void OnMouseExit()
     {
-        renderer.material.color= Color.white;
+        Rrenderer.material.color= Color.white;
     }
 }
