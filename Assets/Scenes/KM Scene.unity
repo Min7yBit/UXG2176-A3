@@ -805,7 +805,7 @@ GameObject:
   - component: {fileID: 191122006}
   - component: {fileID: 191122004}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Reflection Cam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1032,8 +1032,9 @@ GameObject:
   - component: {fileID: 234175485}
   - component: {fileID: 234175484}
   - component: {fileID: 234175483}
+  - component: {fileID: 234175486}
   m_Layer: 0
-  m_Name: Glass Shard
+  m_Name: Mirror Shard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1130,6 +1131,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 234175481}
   m_Mesh: {fileID: 8956276461189781062, guid: a36d0a47da843d647b5e06f18d85095e, type: 3}
+--- !u!114 &234175486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234175481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 213a14a3e824e944e9951e1bf8e4b801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 9b2b208f4aad8dc4a9c84245c199ee3a, type: 3}
+  itemName: Mirror Shard
 --- !u!1 &262237699
 GameObject:
   m_ObjectHideFlags: 0
@@ -5589,7 +5604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 31078c16677b6b14b9a7698d0d12b6f4, type: 3}
-  itemName: Bed Leg
+  itemName: BedLeg
 --- !u!114 &1328777433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5633,12 +5648,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 483719864}
-  - {fileID: 1799183551}
-  - {fileID: 1509679130}
-  - {fileID: 1279748921}
   - {fileID: 861724879}
+  - {fileID: 1799183551}
   - {fileID: 1867838317}
   - {fileID: 1685679867}
+  - {fileID: 1509679130}
+  - {fileID: 1279748921}
   - {fileID: 646627240}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7246,7 +7261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1685679867
 Transform:
   m_ObjectHideFlags: 0
@@ -8834,6 +8849,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1867838317}
+  - component: {fileID: 1867838318}
+  - component: {fileID: 1867838319}
   m_Layer: 0
   m_Name: Mirror
   m_TagString: Untagged
@@ -8859,6 +8876,44 @@ Transform:
   - {fileID: 234175482}
   m_Father: {fileID: 1335987387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1867838318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867838316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51218dd5646071a4791f9dda07c23f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: BedLeg
+  shardItem: {fileID: 234175486}
+  mirrorMess: {fileID: 1685679866}
+  inventory: {fileID: 1778727711}
+  interactable: 1
+--- !u!135 &1867838319
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867838316}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1960738467
 GameObject:
   m_ObjectHideFlags: 0
