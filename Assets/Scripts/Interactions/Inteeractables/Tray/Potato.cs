@@ -14,10 +14,18 @@ public class Potato : MonoBehaviour, IInteractable
     private Quaternion initialRotation;
 
     private Renderer Rrenderer;
-    private bool mouseOver = false;
+    [SerializeField]private bool mouseOver = false;
     private bool interactable = true;
-    private bool zoomedIn = false;
+    [SerializeField]private bool zoomedIn = false;
     private bool allowRotation = false;
+
+    [Header("Rotation Settings")]
+    public int intervals = 4;
+    public float rotationDuration = 0.25f;
+    [SerializeField] private int currentStepIndex = 0; // Tracks which step we are currently at
+    private float stepAngle;         // The angle of a single step (360 / intervals)
+    private Coroutine rotateCoroutine;
+
     private void Awake()
     {
         Rrenderer = GetComponent<Renderer>();
@@ -26,6 +34,15 @@ public class Potato : MonoBehaviour, IInteractable
     {
         initialPosition = transform.position;
         initialRotation = transform.rotation;
+
+        // Safety check to prevent division by zero and nonsensical rotations
+        if (intervals <= 0)
+        {
+            Debug.LogError("Intervals must be a positive integer!");
+            intervals = 1;
+        }
+        // Calculate the fixed angle for each interval
+        stepAngle = 360f / intervals;
     }
     public Transform GetTransform()
     {
@@ -37,6 +54,13 @@ public class Potato : MonoBehaviour, IInteractable
         Rrenderer.material.color = Color.yellow;
         mouseOver = true;
     }
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0) && mouseOver && zoomedIn)
+        {
+            RotateToNextInterval(); //when zoomed in, left click to rotate
+        }
+    }
     private void OnMouseExit()
     {
         Debug.Log("Mouse Exited Potato");
@@ -46,15 +70,14 @@ public class Potato : MonoBehaviour, IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        if (!interactable || !mouseOver)
-            return;
+        //must be in contact with it to work!!!
 
-        if (zoomedIn)
+        if (zoomedIn && !mouseOver) //click anywhere but the potato to zoom out
         {
             interactable = false; 
             ZoomOut();
         }
-        else
+        else if (!zoomedIn && mouseOver && interactable) //click on the potato to zoom in
         {
             interactable = false;
             ZoomIn();
@@ -116,5 +139,46 @@ public class Potato : MonoBehaviour, IInteractable
         zoomedIn = false;
         allowRotation = false;
         interactable = false;
+    }
+
+    private void RotateToNextInterval()
+    {
+        float currentY = transform.localEulerAngles.y;
+        float newTargetY = currentY + stepAngle;
+
+        Quaternion startRotation = transform.rotation;
+
+        Quaternion targetRotation = Quaternion.Euler(
+            transform.localEulerAngles.x,
+            newTargetY,
+            transform.localEulerAngles.z
+        );
+
+        if (rotateCoroutine != null)
+        {
+            StopCoroutine(rotateCoroutine);
+        }
+        rotateCoroutine = StartCoroutine(RotateSmoothly(startRotation, targetRotation));
+
+        currentStepIndex = (currentStepIndex + 1) % intervals;
+    }
+
+    IEnumerator RotateSmoothly(Quaternion startRot, Quaternion endRot)
+    {
+        float timeElapsed = 0f;
+
+        while (timeElapsed < rotationDuration)
+        {
+            float t = timeElapsed / rotationDuration;
+
+            transform.rotation = Quaternion.Slerp(startRot, endRot, t);
+
+            timeElapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        transform.rotation = endRot;
+        rotateCoroutine = null; 
     }
 }

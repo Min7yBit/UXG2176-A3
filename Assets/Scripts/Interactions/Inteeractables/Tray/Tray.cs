@@ -8,9 +8,10 @@ public class Tray : MonoBehaviour, IInteractable
 
     public CameraControl cameraControl;
     public Camera cam;
+    public Potato potato;
 
-/*    private Renderer Rrenderer;
-    private bool mouseOver = false;*/
+    /*    private Renderer Rrenderer;
+        private bool mouseOver = false;*/
     private bool interactable = true;
     private PlayerMovement playerMovement;
     [SerializeField]private List<Transform> childTransforms;
@@ -54,6 +55,7 @@ public class Tray : MonoBehaviour, IInteractable
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
+            potato.ResetPotato();
             DisableChildInteraction();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
