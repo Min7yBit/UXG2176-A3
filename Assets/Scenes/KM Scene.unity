@@ -4134,7 +4134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1543531051}
-  potato: {fileID: 0}
+  potato: {fileID: 390939652}
   childTransforms: []
 --- !u!65 &861724884
 BoxCollider:
