@@ -1,127 +1,108 @@
 using UnityEngine;
 
-public class BrokenWall : MonoBehaviour, IInteractable
+public class CrackWall : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
-    [Header("Requirements")]
-    [Tooltip("Name of the item needed to scrape the wall.")]
-    public string requiredItemName = "Spoon";
+    [Header("Required Item")]
+    [Tooltip("Name of the item required to scrape the wall.")]
+    public string itemName = "Spoon";
 
-    [Header("Diggy hole Settings")]
-    [Tooltip("How many times the player must scrape before the hint appears.")]
+    [Header("Scrape Settings")]
+    [Tooltip("How many diggity digs (clicks) before the wall breaks.")]
     public int scrapesNeeded = 3;
-
-    [Header("Wall & Hint Objects")]
-    [Tooltip("Intact wall mesh/obj to hide after scraping is done.")]
-    public GameObject intactWallObject;
-    [Tooltip("Scraped/broken version of the wall to show when solved.")]
-    public GameObject scrapedWallObject;
-    [Tooltip("The hint object")]
-    public GameObject hint2Object;
-
-    [Header("References")]
-    [SerializeField] private Inventory inventory;   
-
-    private bool interactable = false;
-    private bool mouseOver = false;
     private int currentScrapes = 0;
 
-    private Renderer rend;
+    [Header("Cell / Wall Objects")]
+    [Tooltip("The intact version of the cell / wall.")]
+    [SerializeField] private GameObject intactCell;
+    [Tooltip("The broken / holed version of the cell / wall.")]
+    [SerializeField] private GameObject holedCell;
+    [Tooltip("Hint object to reveal after wall is broken.")]
+    [SerializeField] private GameObject hintObject;
 
-    private void Awake()
-    {
-        rend = GetComponent<Renderer>();
+    [Header("References")]
+    [SerializeField] private Inventory inventory;
 
-       
-        if (hint2Object != null) hint2Object.SetActive(false);
-        if (scrapedWallObject != null) scrapedWallObject.SetActive(false);
-        if (intactWallObject != null) intactWallObject.SetActive(true);
-    }
+    private bool interactable = true;
 
     public Transform GetTransform()
     {
         return transform;
     }
 
+    private void Awake()
+    {
+        // Ensure starting state is correct
+        if (intactCell != null) intactCell.SetActive(true);
+        if (holedCell != null) holedCell.SetActive(false);
+        if (hintObject != null) hintObject.SetActive(false);
+    }
+
     private void OnMouseEnter()
     {
-        mouseOver = true;
-        interactable = true;
-
-        // Optional highlight
-        if (rend != null)
-        {
-            Color c = rend.material.color;
-            c.a = 0.6f;
-            rend.material.color = c;
-        }
+        Debug.Log("Mouse Entered CrackWall area: " + name);
     }
 
     private void OnMouseExit()
     {
-        mouseOver = false;
-        interactable = false;
-
-        // Reset highlight
-        if (rend != null)
-        {
-            Color c = rend.material.color;
-            c.a = 1f;
-            rend.material.color = c;
-        }
+        Debug.Log("Mouse Exited CrackWall area: " + name);
     }
 
-    public void OnInteract(in PlayerMovement playerMovement)
+    private void OnMouseOver()
     {
-        // Must be the focused interactable AND currently interactable
-        if (!interactable || !mouseOver)
+        if (!interactable)
             return;
 
-        Debug.Log($"Attempting to scrape wall with {requiredItemName}");
-
-        if (inventory == null)
+        // Left click while hovering
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.LogWarning("BrokenWall: Inventory reference is missing!");
-            return;
-        }
+            if (inventory == null)
+            {
+                Debug.LogWarning("CrackWall: Inventory reference not assigned in Inspector.");
+                return;
+            }
 
-        // Your Inventory.ContainsItem() only returns true if that item is in a SELECTED slot.
-        if (!inventory.ContainsItem(requiredItemName))
-        {
-            Debug.Log("The wall looks weak... Maybe I can use something to scrape it.");
-            // Here you can hook up UI feedback instead of Debug.Log
-            return;
-        }
+            // Your Inventory.ContainsItem only returns true if that item is in a SELECTED slot.
+            if (inventory.ContainsItem(itemName))
+            {
+                currentScrapes++;
+                Debug.Log($"Scraping wall with {itemName}... ({currentScrapes}/{scrapesNeeded})");
 
-        // Player has the spoon selected ? scrape
-        currentScrapes++;
-        Debug.Log($"Scraping wall... ({currentScrapes}/{scrapesNeeded})");
-
-        // Optional: add scrape SFX or particle effect here
-
-        if (currentScrapes >= scrapesNeeded)
-        {
-            RevealHint();
+                if (currentScrapes >= scrapesNeeded)
+                {
+                    RevealHint();
+                }
+            }
+            else
+            {
+                Debug.Log($"Cannot scrape wall, required item not selected: {itemName}");
+            }
         }
     }
 
     private void RevealHint()
     {
-        Debug.Log("The plaster flakes away... You found Hint 2!");
+        Debug.Log("Wall broken, revealing hole and Hint.");
 
-        if (intactWallObject != null)
-            intactWallObject.SetActive(false);
-
-        if (scrapedWallObject != null)
-            scrapedWallObject.SetActive(true);
-
-        if (hint2Object != null)
-            hint2Object.SetActive(true);
-
-        // Stop further interactions
         interactable = false;
-        mouseOver = false;
+
+        if (intactCell != null)
+            intactCell.SetActive(false);
+
+        if (holedCell != null)
+            holedCell.SetActive(true);
+
+        if (hintObject != null)
+            hintObject.SetActive(true);
+
+       
+    }
+
+    public void OnInteract(in PlayerMovement playerMovement)
+    {
+       
     }
 }
