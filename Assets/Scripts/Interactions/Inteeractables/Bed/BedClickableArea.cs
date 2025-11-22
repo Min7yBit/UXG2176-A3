@@ -34,12 +34,17 @@ public class BedClickableArea : MonoBehaviour, IInteractable
     }
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        if (!mouseOver)
-            return;
-        Debug.Log("Interacted with " + name);
-        cameraControl.SwitchToFixedCamera(cam);
-        col.enabled = false; //disables interaction so can interact with child components
-        bedCol.enabled = false; //disables bed collider
+    }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            Debug.Log("Interacted with " + name);
+            cameraControl.SwitchToFixedCamera(cam);
+            col.enabled = false; //disables interaction so can interact with child components
+            bedCol.enabled = false; //disables bed collider
+        }
     }
 
     private void Update()

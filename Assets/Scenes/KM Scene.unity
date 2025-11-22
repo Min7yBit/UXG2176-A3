@@ -1158,7 +1158,7 @@ GameObject:
   - component: {fileID: 248024813}
   m_Layer: 0
   m_Name: Door Cam
-  m_TagString: Untagged
+  m_TagString: FixedCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8854,7 +8854,7 @@ GameObject:
   - component: {fileID: 1785144778}
   m_Layer: 0
   m_Name: Lock Cam
-  m_TagString: Untagged
+  m_TagString: FixedCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BedLeg : MonoBehaviour, IInteractable
@@ -35,23 +36,29 @@ public class BedLeg : MonoBehaviour, IInteractable
         Rrenderer.material.color = Color.white;
         mouseOver = false;
     }
-    public void OnInteract(in PlayerMovement playerMovement)
+
+    private void OnMouseOver()
     {
+        if (!interactable)
+            return;
+
         if (!canRemove)
         {
             Debug.Log("I can't remove it with the screw on.");
             return;
         }
 
-        if (!interactable || !mouseOver)
-            return;
         Debug.Log("Interacted with " + name);
 
-        Item item = GetComponent<Item>();
-        if (item != null)
-        {
-            playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
-            gameObject.SetActive(false); //disable the object after picking it up
-        }
+        //Item item = GetComponent<Item>();
+        //if (item != null)
+        //{
+        //    playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
+        //    gameObject.SetActive(false); //disable the object after picking it up
+        //}
+    }
+    public void OnInteract(in PlayerMovement playerMovement)
+    {
+        
     }
 }
