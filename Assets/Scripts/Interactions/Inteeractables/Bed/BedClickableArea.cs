@@ -10,7 +10,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
     public CameraControl cameraControl;
     public Camera cam;
 
-    private bool interactable = true;
+    private bool interactable = false;
     private bool mouseOver = false;
     private PlayerMovement playerMovement;
     [SerializeField] private Collider col;
@@ -40,7 +40,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && CanInteract)
         {
             InInteract = true;
             Debug.Log("Interacted with " + name);

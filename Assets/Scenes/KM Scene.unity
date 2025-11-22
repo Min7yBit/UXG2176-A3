@@ -3501,7 +3501,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738246124}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9acc33e2aa6e5dc49bb9a3d698885c4d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3513,8 +3513,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.629006, y: 0.318444, z: 1.3856742}
-  m_Center: {x: -2.8436694, y: 0.446949, z: -1.9884174}
+  m_Size: {x: 2.6241267, y: 0.31844407, z: 1.3608686}
+  m_Center: {x: -2.8412325, y: 0.446949, z: -1.9760163}
 --- !u!23 &738246128
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8254,6 +8254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1842719337}
+  col: {fileID: 0}
   bedCol: {fileID: 738246126}
 --- !u!1 &1756740602
 GameObject:
@@ -8444,7 +8445,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &1778727704
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8549,11 +8550,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7adc13f67c02f449bebc5c7a0d84e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 7
+  acceleration: 12
+  deceleration: 10
+  airControl: 0.4
   lookSensitivity: 2
-  jumpForce: 5
   cameraHolder: {fileID: 1739561122}
-  groundCheckDistance: 1.04
+  jumpForce: 6
+  groundCheckDistance: 1.01
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
