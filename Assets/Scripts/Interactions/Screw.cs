@@ -3,8 +3,8 @@ using UnityEngine;
 public class Screw : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
-
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
     public string itemName;
     [SerializeField]private BedLeg bedLeg;
 

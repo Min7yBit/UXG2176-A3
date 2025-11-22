@@ -4,7 +4,8 @@ public class TestInteractable : MonoBehaviour, IInteractable
 {
     public string Name => name;
 
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
     public bool interactable;
     private Renderer Rrenderer;
@@ -37,6 +38,7 @@ public class TestInteractable : MonoBehaviour, IInteractable
     {
         if (!interactable || !mouseOver)
             return;
+
         Debug.Log("Interacted with " + name);
 
         Item item = GetComponent<Item>();

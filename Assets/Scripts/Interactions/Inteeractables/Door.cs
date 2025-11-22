@@ -3,7 +3,8 @@ using UnityEngine;
 public class Door : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
     public CameraControl cameraControl;
     public Camera cam;
@@ -25,6 +26,7 @@ public class Door : MonoBehaviour, IInteractable
     {        
         if (inventory.ContainsItem(itemName))
         {
+            InInteract = true;
             lockReflection.SetActive(true);
             mirrorShardCol.enabled = true;
             interactable = false;
@@ -41,14 +43,18 @@ public class Door : MonoBehaviour, IInteractable
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (InInteract)
         {
-            mirrorShardCol.enabled = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            interactable = true;
-            playerMovement.CanMove = true;
-            cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                InInteract = false;
+                mirrorShardCol.enabled = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                interactable = true;
+                playerMovement.CanMove = true;
+                cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            }
         }
     }
 }

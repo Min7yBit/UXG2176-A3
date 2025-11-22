@@ -59,7 +59,7 @@ public class PlayerInteract : MonoBehaviour
         {
             if (collider.TryGetComponent(out IInteractable interactable))
             {
-                if (interactable.canInteract)
+                if (interactable.CanInteract)
                     interactableList.Add(interactable);
             }
         }

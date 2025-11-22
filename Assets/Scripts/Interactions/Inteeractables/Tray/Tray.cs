@@ -4,7 +4,9 @@ using UnityEngine;
 public class Tray : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract  { get => interactable; set { interactable = value; } }
+    public bool CanInteract  { get => interactable; set { interactable = value; } }
+
+    public bool InInteract { get; set; } = false;
 
     public CameraControl cameraControl;
     public Camera cam;
@@ -42,8 +44,11 @@ public class Tray : MonoBehaviour, IInteractable
     {
 /*        if (!mouseOver)
             return;*/
+
+        
         EnableChildInteraction();
         interactable = false;
+        InInteract = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         this.playerMovement = playerMovement;
@@ -53,15 +58,19 @@ public class Tray : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (InInteract)
         {
-            potato.ResetPotato();
-            DisableChildInteraction();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            interactable = true;
-            playerMovement.CanMove = true;
-            cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                InInteract = false;
+                potato.ResetPotato();
+                DisableChildInteraction();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                interactable = true;
+                playerMovement.CanMove = true;
+                cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            }
         }
     }
     private void InitiateTransformList()
@@ -82,7 +91,7 @@ public class Tray : MonoBehaviour, IInteractable
             IInteractable interactableComponent = child.GetComponent<IInteractable>();
             if (interactableComponent != null)
             {
-                interactableComponent.canInteract = false;
+                interactableComponent.CanInteract = false;
             }
         }
     }
@@ -94,7 +103,7 @@ public class Tray : MonoBehaviour, IInteractable
             IInteractable interactableComponent = child.GetComponent<IInteractable>();
             if (interactableComponent != null)
             {
-                interactableComponent.canInteract = true;
+                interactableComponent.CanInteract = true;
             }
         }
     }
