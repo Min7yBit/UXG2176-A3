@@ -4,7 +4,8 @@ public interface IInteractable
 {
     public string Name { get;}
 
-    public bool canInteract { get; set; }
+    public bool CanInteract { get; set; }
+    public bool InInteract { get; set; }
     public void OnInteract(in PlayerMovement playerMovement);
     public Transform GetTransform();
 }

@@ -3,7 +3,9 @@ using UnityEngine;
 public class BedClickableArea : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+
+    public bool InInteract { get; set; } = false;
 
     public CameraControl cameraControl;
     public Camera cam;
@@ -11,7 +13,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
     private bool interactable = true;
     private bool mouseOver = false;
     private PlayerMovement playerMovement;
-    private Collider col;
+    [SerializeField] private Collider col;
     [SerializeField]private Collider bedCol;
     private void Awake()
     {
@@ -40,6 +42,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
     {
         if (Input.GetMouseButton(0))
         {
+            InInteract = true;
             Debug.Log("Interacted with " + name);
             cameraControl.SwitchToFixedCamera(cam);
             col.enabled = false; //disables interaction so can interact with child components
@@ -49,15 +52,19 @@ public class BedClickableArea : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (InInteract)
         {
-            col.enabled = true; //enables interaction again
-            bedCol.enabled = true; //enables bed collider again
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            interactable = true;
-            playerMovement.CanMove = true;
-            cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                InInteract = false;
+                col.enabled = true; //enables interaction again
+                bedCol.enabled = true; //enables bed collider again
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                interactable = true;
+                cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            }
         }
     }
 }

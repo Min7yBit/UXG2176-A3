@@ -5,7 +5,8 @@ public class BedLeg : MonoBehaviour, IInteractable
 {
     public string Name => name;
 
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
     public bool canRemove = false;
     
@@ -22,7 +23,7 @@ public class BedLeg : MonoBehaviour, IInteractable
     }
     private void OnMouseEnter()
     {
-        if (!interactable)
+        if (!interactable   )
             return;
         Debug.Log("Mouse Entered " + name);
         Rrenderer.material.color = Color.yellow;
@@ -41,21 +42,24 @@ public class BedLeg : MonoBehaviour, IInteractable
     {
         if (!interactable)
             return;
-
-        if (!canRemove)
+        if (Input.GetMouseButton(0))
         {
-            Debug.Log("I can't remove it with the screw on.");
-            return;
+
+            if (!canRemove)
+            {
+                Debug.Log("I can't remove it with the screw on.");
+                return;
+            }
+
+            Debug.Log("Interacted with " + name);
+            Item item = GetComponent<Item>();
+            if (item != null)
+            {
+                //playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
+                gameObject.SetActive(false); //disable the object after picking it up
+            }
         }
 
-        Debug.Log("Interacted with " + name);
-
-        //Item item = GetComponent<Item>();
-        //if (item != null)
-        //{
-        //    playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
-        //    gameObject.SetActive(false); //disable the object after picking it up
-        //}
     }
     public void OnInteract(in PlayerMovement playerMovement)
     {

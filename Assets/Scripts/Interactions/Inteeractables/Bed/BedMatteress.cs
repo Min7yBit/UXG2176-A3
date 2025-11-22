@@ -4,7 +4,8 @@ using System.Collections;
 public class BedMattress : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
     private Renderer Rrenderer;
     private bool mouseOver = false;

@@ -3,7 +3,8 @@ using UnityEngine;
 public class DoorMirror : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
     public CameraControl cameraControl;
     public Camera cam;
@@ -21,6 +22,7 @@ public class DoorMirror : MonoBehaviour, IInteractable
         if (!interactable) 
             return;
         interactable = false;
+        InInteract = true;
         Debug.Log("Interacted with " + name);
         cameraControl.SwitchToFixedCamera(cam);        
         doorCol.enabled = false; //disables door collider
@@ -28,15 +30,19 @@ public class DoorMirror : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (InInteract)
         {
-            interactable = true;
-            doorCol.enabled = true; //enables door collider again
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            interactable = true;
-            playerMovement.CanMove = true;
-            cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                InInteract = false;
+                interactable = true;
+                doorCol.enabled = true; //enables door collider again
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                interactable = true;
+                playerMovement.CanMove = true;
+                cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            }
         }
     }
 }

@@ -4,7 +4,8 @@ using System.Collections;
 public class Potato : MonoBehaviour, IInteractable
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
 
     public float zoomDuration = 1.0f;
     public Vector3 zoomedPosition;

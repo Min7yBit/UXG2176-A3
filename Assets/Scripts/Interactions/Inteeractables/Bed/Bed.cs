@@ -5,8 +5,8 @@ public class Bed : MonoBehaviour,IInteractable
 
 {
     public string Name => name;
-    public bool canInteract { get => interactable; set { interactable = value; } }
-
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
     public CameraControl cameraControl;
     public Camera cam;
 
@@ -26,6 +26,7 @@ public class Bed : MonoBehaviour,IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
+        InInteract = true;
         EnableChildInteraction();
         interactable = false;
         Cursor.lockState = CursorLockMode.None;
@@ -37,14 +38,18 @@ public class Bed : MonoBehaviour,IInteractable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (InInteract)
         {
-            DisableChildInteraction();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            interactable = true;
-            playerMovement.CanMove = true;
-            cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                InInteract = false;
+                DisableChildInteraction();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                interactable = true;
+                playerMovement.CanMove = true;
+                cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
+            }
         }
     }
     private void InitiateTransformList()
@@ -65,7 +70,7 @@ public class Bed : MonoBehaviour,IInteractable
             IInteractable interactableComponent = child.GetComponent<IInteractable>();
             if (interactableComponent != null)
             {
-                interactableComponent.canInteract = false;
+                interactableComponent.CanInteract = false;
             }
         }
     }
@@ -77,7 +82,7 @@ public class Bed : MonoBehaviour,IInteractable
             IInteractable interactableComponent = child.GetComponent<IInteractable>();
             if (interactableComponent != null)
             {
-                interactableComponent.canInteract = true;
+                interactableComponent.CanInteract = true;
             }
         }
     }
