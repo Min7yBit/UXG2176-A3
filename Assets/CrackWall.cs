@@ -7,7 +7,7 @@ public class CrackWall : MonoBehaviour, IInteractable
     public bool InInteract { get; set; } = false;
 
     [Header("Required Item")]
-    [Tooltip("Name of the item required to scrape the wall.")]
+    [Tooltip("Name of item required to scrape the wall.")]
     public string itemName = "Spoon";
 
     [Header("Scrape Settings")]
@@ -16,14 +16,14 @@ public class CrackWall : MonoBehaviour, IInteractable
     private int currentScrapes = 0;
 
     [Header("Cell / Wall Objects")]
-    [Tooltip("The intact version of the cell / wall.")]
+    [Tooltip("The default ver.")]
     [SerializeField] private GameObject intactCell;
-    [Tooltip("The broken / holed version of the cell / wall.")]
+    [Tooltip("The hole ver")]
     [SerializeField] private GameObject holedCell;
     [Tooltip("Hint object to reveal after wall is broken.")]
     [SerializeField] private GameObject hintObject;
 
-    [Header("References")]
+    [Header("Assing Player Inventory")]
     [SerializeField] private Inventory inventory;
 
     private bool interactable = true;
@@ -43,12 +43,12 @@ public class CrackWall : MonoBehaviour, IInteractable
 
     private void OnMouseEnter()
     {
-        Debug.Log("Mouse Entered CrackWall area: " + name);
+        Debug.Log("Mouse Entered CrackWall area " );
     }
 
     private void OnMouseExit()
     {
-        Debug.Log("Mouse Exited CrackWall area: " + name);
+        Debug.Log("Mouse Exited CrackWall area " );
     }
 
     private void OnMouseOver()
