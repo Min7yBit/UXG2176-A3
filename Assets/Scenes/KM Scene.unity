@@ -8254,6 +8254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1842719337}
+  col: {fileID: 0}
   bedCol: {fileID: 738246126}
 --- !u!1 &1756740602
 GameObject:
