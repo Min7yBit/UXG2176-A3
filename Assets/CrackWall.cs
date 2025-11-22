@@ -65,7 +65,7 @@ public class CrackWall : MonoBehaviour, IInteractable
                 return;
             }
 
-            // Your Inventory.ContainsItem only returns true if that item is in a SELECTED slot.
+            //  Inventory.ContainsItem only returns true if that item is in a SELECTED slot.
             if (inventory.ContainsItem(itemName))
             {
                 currentScrapes++;
@@ -98,7 +98,7 @@ public class CrackWall : MonoBehaviour, IInteractable
         if (hintObject != null)
             hintObject.SetActive(true);
 
-       
+        gameObject.SetActive(false);
     }
 
     public void OnInteract(in PlayerMovement playerMovement)
