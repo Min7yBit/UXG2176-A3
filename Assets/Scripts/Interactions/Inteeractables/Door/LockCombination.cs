@@ -46,21 +46,16 @@ public class LockCombination : MonoBehaviour
 
     private void RotateToNextInterval()
     {
-        float currentY = transform.localEulerAngles.y;
-        float newTargetY = currentY + stepAngle;
+        Quaternion startRotation = transform.localRotation;
 
-        Quaternion startRotation = transform.rotation;
+        // Use quaternion multiplication instead of Euler reads
+        Quaternion stepRotation = Quaternion.Euler(0f, stepAngle, 0f); // rotate on Y
 
-        Quaternion targetRotation = Quaternion.Euler(
-            transform.localEulerAngles.x,
-            newTargetY,
-            transform.localEulerAngles.z
-        );
+        Quaternion targetRotation = startRotation * stepRotation;
 
         if (rotateCoroutine != null)
-        {
             StopCoroutine(rotateCoroutine);
-        }
+
         rotateCoroutine = StartCoroutine(RotateSmoothly(startRotation, targetRotation));
 
         currentStepIndex = (currentStepIndex + 1) % intervals;

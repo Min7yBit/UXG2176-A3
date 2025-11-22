@@ -8,7 +8,7 @@ public class Potato : MonoBehaviour, IInteractable
 
     public float zoomDuration = 1.0f;
     public Vector3 zoomedPosition;
-    public Quaternion rotatePosition;
+    public Vector3 rotatePosition;
 
     private Vector3 initialPosition;
     private Quaternion initialRotation;
@@ -25,6 +25,7 @@ public class Potato : MonoBehaviour, IInteractable
     [SerializeField] private int currentStepIndex = 0; // Tracks which step we are currently at
     private float stepAngle;         // The angle of a single step (360 / intervals)
     private Coroutine rotateCoroutine;
+    private bool rotating = false;
 
     private void Awake()
     {
@@ -32,8 +33,8 @@ public class Potato : MonoBehaviour, IInteractable
     }
     private void Start()
     {
-        initialPosition = transform.position;
-        initialRotation = transform.rotation;
+        initialPosition = transform.localPosition;
+        initialRotation = transform.localRotation;
 
         // Safety check to prevent division by zero and nonsensical rotations
         if (intervals <= 0)
@@ -86,13 +87,13 @@ public class Potato : MonoBehaviour, IInteractable
 
     private void ZoomIn()
     {
-        StartCoroutine(ZoomCoroutine(transform.position, zoomedPosition, zoomDuration));
-        StartCoroutine(RotateCoroutine(transform.rotation, rotatePosition, zoomDuration));
+        StartCoroutine(ZoomCoroutine(transform.localPosition, zoomedPosition, zoomDuration));
+        StartCoroutine(RotateCoroutine(transform.localRotation, Quaternion.Euler(rotatePosition), zoomDuration));
     }
     private void ZoomOut()
     {
-        StartCoroutine(ZoomCoroutine(transform.position, initialPosition, zoomDuration));
-        StartCoroutine(RotateCoroutine(transform.rotation, initialRotation, zoomDuration));
+        StartCoroutine(ZoomCoroutine(transform.localPosition, initialPosition, zoomDuration));
+        StartCoroutine(RotateCoroutine(transform.localRotation, initialRotation, zoomDuration));
     }
     private IEnumerator ZoomCoroutine(Vector3 startPos, Vector3 endPos, float duration)
     {
@@ -101,14 +102,14 @@ public class Potato : MonoBehaviour, IInteractable
         while (timeElapsed < duration)
         {
             float t = timeElapsed / duration;
-            transform.position = Vector3.Lerp(startPos, endPos, t);
+            transform.localPosition = Vector3.Lerp(startPos, endPos, t);
 
             timeElapsed += Time.deltaTime;
 
             yield return null;
         }
 
-        transform.position = endPos;
+        transform.localPosition = endPos;
 
         //toggles
         zoomedIn = !zoomedIn; 
@@ -122,20 +123,20 @@ public class Potato : MonoBehaviour, IInteractable
         while (timeElapsed < duration)
         {
             float t = timeElapsed / duration;
-            transform.rotation = Quaternion.Lerp(startPos, endPos, t);
+            transform.localRotation = Quaternion.Lerp(startPos, endPos, t);
 
             timeElapsed += Time.deltaTime;
 
             yield return null;
         }
 
-        transform.rotation = endPos;
+        transform.localRotation = endPos;
     }
 
     public void ResetPotato()
     {
-        transform.position = initialPosition;
-        transform.rotation = initialRotation;
+        transform.localPosition = initialPosition;
+        transform.localRotation = initialRotation;
         zoomedIn = false;
         allowRotation = false;
         interactable = false;
@@ -143,21 +144,23 @@ public class Potato : MonoBehaviour, IInteractable
 
     private void RotateToNextInterval()
     {
-        float currentY = transform.localEulerAngles.y;
-        float newTargetY = currentY + stepAngle;
+        if (rotating)
+            return;
 
-        Quaternion startRotation = transform.rotation;
+        Debug.Log("X axis (Right) = " + transform.right);
+        Debug.Log("Y axis (Up) = " + transform.up);
+        Debug.Log("Z axis (Forward) = " + transform.forward);
 
-        Quaternion targetRotation = Quaternion.Euler(
-            transform.localEulerAngles.x,
-            newTargetY,
-            transform.localEulerAngles.z
-        );
+        Quaternion startRotation = transform.localRotation;
+
+        // Rotate around local X axis
+        Quaternion stepRotation = Quaternion.AngleAxis(stepAngle, Vector3.up);
+
+        Quaternion targetRotation = startRotation * stepRotation;
 
         if (rotateCoroutine != null)
-        {
             StopCoroutine(rotateCoroutine);
-        }
+
         rotateCoroutine = StartCoroutine(RotateSmoothly(startRotation, targetRotation));
 
         currentStepIndex = (currentStepIndex + 1) % intervals;
@@ -165,20 +168,20 @@ public class Potato : MonoBehaviour, IInteractable
 
     IEnumerator RotateSmoothly(Quaternion startRot, Quaternion endRot)
     {
+        rotating = true;
         float timeElapsed = 0f;
 
         while (timeElapsed < rotationDuration)
         {
             float t = timeElapsed / rotationDuration;
-
-            transform.rotation = Quaternion.Slerp(startRot, endRot, t);
-
+            transform.localRotation = Quaternion.Slerp(startRot, endRot, t);
             timeElapsed += Time.deltaTime;
-
             yield return null;
         }
 
-        transform.rotation = endRot;
-        rotateCoroutine = null; 
+        transform.localRotation = endRot;
+        rotateCoroutine = null;
+        rotating = false;
     }
+
 }
