@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.Events;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -20,19 +20,39 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckDistance = 1.1f;
     public LayerMask groundLayer;
 
+    [Header("SFX Settings")]
+    public AudioSource audioSource;
+
+    [Header("Footsteps")]
+    public AudioClip[] footstepClips;
+    public float footstepInterval = 0.45f;
+    public float footstepVolume = 0.8f;
+
+    [Header("Jump SFX")]
+    public AudioClip jumpClip;
+    [Range(0f, 2f)] public float jumpVolume = 1f;
+
+    [Header("Landing SFX")]
+    public AudioClip landClip;
+    [Range(0f, 2f)] public float landVolume = 1f;
+
     private Rigidbody rb;
     private float rotationX;
+
     private bool canMove = true;
     public bool CanMove { get => canMove; set => canMove = value; }
 
-    // ---------------------------
-    // INPUT STORAGE
-    // ---------------------------
+    // INPUT
     private float inputX;
     private float inputZ;
     private bool jumpPressed;
 
-    public UnityEvent OnJumpEvent;
+    // FOOTSTEPS / LANDING
+    private float footstepTimer;
+    private bool wasGrounded = true;
+
+    // NEW: used to block footsteps during jump until we land
+    private bool suppressFootstepsUntilGrounded = false;
 
     void Start()
     {
@@ -47,9 +67,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!CanMove) return;
 
-        // -----------------------
-        // GATHER INPUT HERE
-        // -----------------------
         inputX = Input.GetAxisRaw("Horizontal");
         inputZ = Input.GetAxisRaw("Vertical");
 
@@ -65,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
         MovePlayer();
         HandleJump();
+        HandleFootstepsAndLanding();
     }
 
     // -------------------------------------------------------
@@ -81,31 +99,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputDir.sqrMagnitude > 0.01f)
         {
-            // Accelerate toward desired velocity
             Vector3 target = inputDir * moveSpeed;
-            Vector3 newVel = Vector3.MoveTowards(
-                horizontalVel,
-                target,
-                acceleration * control * Time.fixedDeltaTime
-            );
+            Vector3 newVel = Vector3.MoveTowards(horizontalVel, target,
+                acceleration * control * Time.fixedDeltaTime);
 
             rb.linearVelocity = new Vector3(newVel.x, currentVel.y, newVel.z);
         }
         else
         {
-            // Decelerate naturally when no input
-            Vector3 newVel = Vector3.MoveTowards(
-                horizontalVel,
-                Vector3.zero,
-                deceleration * control * Time.fixedDeltaTime
-            );
+            Vector3 newVel = Vector3.MoveTowards(horizontalVel, Vector3.zero,
+                deceleration * control * Time.fixedDeltaTime);
 
             rb.linearVelocity = new Vector3(newVel.x, currentVel.y, newVel.z);
         }
     }
 
     // -------------------------------------------------------
-    // JUMPING
+    // JUMP
     // -------------------------------------------------------
     void HandleJump()
     {
@@ -116,41 +126,112 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = vel;
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-            OnJumpEvent?.Invoke();
+
+            // we just jumped – block footsteps until we land
+            suppressFootstepsUntilGrounded = true;
+
+            PlayJumpSFX();
         }
 
-        jumpPressed = false; // reset after applying
+        jumpPressed = false;
     }
 
     // -------------------------------------------------------
-    // GROUND CHECK
+    // FOOTSTEPS + LANDING
+    // -------------------------------------------------------
+    void HandleFootstepsAndLanding()
+    {
+        bool grounded = IsGrounded();
+
+        // LANDING
+        if (!wasGrounded && grounded)
+        {
+            PlayLandSFX();
+            // allow footsteps again after landing
+            suppressFootstepsUntilGrounded = false;
+        }
+
+        wasGrounded = grounded;
+
+        // FOOTSTEPS (only when grounded, moving, and not in "jump phase")
+        if (grounded && !suppressFootstepsUntilGrounded && IsMoving())
+        {
+            footstepTimer -= Time.deltaTime;
+
+            if (footstepTimer <= 0f)
+            {
+                PlayFootstepSFX();
+                footstepTimer = footstepInterval;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
+    }
+
+    // -------------------------------------------------------
+    // HELPERS
     // -------------------------------------------------------
     public bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        return Physics.Raycast(transform.position, Vector3.down,
+            groundCheckDistance, groundLayer);
+    }
+
+    public bool IsMoving()
+    {
+        return Mathf.Abs(inputX) > 0.01f || Mathf.Abs(inputZ) > 0.01f;
     }
 
     // -------------------------------------------------------
-    // CAMERA LOOK
+    // SFX
+    // -------------------------------------------------------
+    void PlayFootstepSFX()
+    {
+        if (footstepClips.Length == 0 || audioSource == null) return;
+
+        AudioClip clip = footstepClips[Random.Range(0, footstepClips.Length)];
+        audioSource.PlayOneShot(clip, footstepVolume);
+    }
+
+    void PlayJumpSFX()
+    {
+        if (jumpClip != null && audioSource != null)
+            audioSource.PlayOneShot(jumpClip, jumpVolume);
+    }
+
+    void PlayLandSFX()
+    {
+        if (landClip != null && audioSource != null)
+            audioSource.PlayOneShot(landClip, landVolume);
+    }
+
+    // -------------------------------------------------------
+    // CAMERA
     // -------------------------------------------------------
     void RotatePlayer()
     {
         float mouseX = Input.GetAxis("Mouse X") * lookSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * lookSensitivity;
 
-        // Rotate player horizontally
         transform.Rotate(Vector3.up * mouseX);
 
-        // Rotate camera vertically
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -80f, 80f);
         cameraHolder.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
     }
 
+    // -------------------------------------------------------
+    // DEBUG
+    // -------------------------------------------------------
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
-        Gizmos.DrawWireSphere(transform.position + Vector3.down * groundCheckDistance, 0.05f);
+        Gizmos.DrawLine(transform.position,
+            transform.position + Vector3.down * groundCheckDistance);
+        Gizmos.DrawWireSphere(
+            transform.position + Vector3.down * groundCheckDistance,
+            0.05f);
     }
 }
