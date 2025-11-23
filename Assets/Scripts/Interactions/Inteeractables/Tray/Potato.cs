@@ -28,6 +28,9 @@ public class Potato : MonoBehaviour, IInteractable
     private Coroutine rotateCoroutine;
     private bool rotating = false;
 
+    [SerializeField] private UIManager uIManager;
+    private bool revealedHint = false;
+
     private void Awake()
     {
         Rrenderer = GetComponent<Renderer>();
@@ -153,10 +156,6 @@ public class Potato : MonoBehaviour, IInteractable
         if (rotating)
             return;
 
-        Debug.Log("X axis (Right) = " + transform.right);
-        Debug.Log("Y axis (Up) = " + transform.up);
-        Debug.Log("Z axis (Forward) = " + transform.forward);
-
         Quaternion startRotation = transform.localRotation;
 
         // Rotate around local X axis
@@ -170,6 +169,12 @@ public class Potato : MonoBehaviour, IInteractable
         rotateCoroutine = StartCoroutine(RotateSmoothly(startRotation, targetRotation));
 
         currentStepIndex = (currentStepIndex + 1) % intervals;
+
+        if (currentStepIndex == 3 && !revealedHint)
+        {
+            revealedHint = true;
+            uIManager.UpdateHintsCount();
+        }
     }
 
     IEnumerator RotateSmoothly(Quaternion startRot, Quaternion endRot)

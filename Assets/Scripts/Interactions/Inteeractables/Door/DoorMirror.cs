@@ -25,6 +25,8 @@ public class DoorMirror : MonoBehaviour, IInteractable
         interactable = false;
         InInteract = true;
         Debug.Log("Interacted with " + name);
+        this.playerMovement = playerMovement;
+        this.playerMovement.CanMove = false;
         cameraControl.SwitchToFixedCamera(cam);        
         doorCol.enabled = false; //disables door collider
     }

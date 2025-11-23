@@ -1,11 +1,14 @@
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     public GameObject pauseMenu;
-    //public GameObject inventory;
+    public GameObject winMenu;
+    public GameObject hintsFound;
     //public Inventory playerInventory;
     //public CombineSystem combineSystem;
+    public int hintsCount = 0;
 
     private bool isPaused = false;
 
@@ -27,7 +30,8 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I) && !isPaused)
         {
             ToggleInventory();
-        }*/
+        }*/        
+
     }
 
     public void TogglePauseMenu()
@@ -41,20 +45,36 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = isPaused;
     }
-
-/*    public void ToggleInventory()
+    public void ShowWinMenu()
     {
-        bool newState = !inventory.activeSelf;
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
-        inventory.SetActive(newState);
+        winMenu.SetActive(true);
+    }
 
-        Cursor.lockState = newState ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = newState || isPaused;
+    public void UpdateHintsCount()
+    {
+        if (hintsCount < 3)
+            hintsCount++;
 
-        if (newState)
+        hintsFound.GetComponentInChildren<TMP_Text>().text = $"Hints Found: {hintsCount}/3";
+    }
+
+    /*    public void ToggleInventory()
         {
-            playerInventory.ResetUI();
-            //combineSystem.ResetCombineSystem();
-        }
-    }*/
+            bool newState = !inventory.activeSelf;
+
+            inventory.SetActive(newState);
+
+            Cursor.lockState = newState ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = newState || isPaused;
+
+            if (newState)
+            {
+                playerInventory.ResetUI();
+                //combineSystem.ResetCombineSystem();
+            }
+        }*/
 }

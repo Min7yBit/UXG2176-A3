@@ -27,6 +27,7 @@ public class CrackWall : MonoBehaviour, IInteractable
 
     [Header("Assing Player Inventory")]
     [SerializeField] private Inventory inventory;
+    [SerializeField] private UIManager uIManager;
 
     private bool interactable = true;
     private bool mouseOver = false;
@@ -77,7 +78,9 @@ public class CrackWall : MonoBehaviour, IInteractable
             hintObject.SetActive(true);
 
         if (crack != null)
-            crack.SetActive(false);       
+            crack.SetActive(false);
+
+        uIManager.UpdateHintsCount();
     }
 
     public void OnInteract(in PlayerMovement playerMovement)

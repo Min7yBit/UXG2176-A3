@@ -6,6 +6,7 @@ public class WinCondition : MonoBehaviour
     public LockCombination lockCombination1;
     public LockCombination lockCombination2;
     public LockCombination lockCombination3;
+    public UIManager manager;
 
     private void Update()
     {
@@ -35,6 +36,7 @@ public class WinCondition : MonoBehaviour
         if (lockCombination1.IsCorrectCombination() && lockCombination2.IsCorrectCombination() && lockCombination3.IsCorrectCombination())
         {
             Debug.Log("Win Condition Met! You unlocked the door!");
+            manager.ShowWinMenu();
             // Additional win logic can be added here
         }
     }
