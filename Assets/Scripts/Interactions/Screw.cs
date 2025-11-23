@@ -8,39 +8,55 @@ public class Screw : MonoBehaviour, IInteractable
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
     public bool ShowPrompt { get; set; } = true;
-    public string itemName;
-    [SerializeField]private BedLeg bedLeg;
 
+    [Header("Required Item")]
+    public string itemName;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;      // assign in inspector
+    [SerializeField] private AudioClip screwRemoveSFX;     // assign sound clip
+    [Range(0f, 2f)] public float screwVolume = 1f;
+
+    [SerializeField] private BedLeg bedLeg;
     private bool interactable = true;
+
+    [Header("Inventory")]
     [SerializeField] private Inventory inventory;
 
     public Transform GetTransform()
     {
         return transform;
     }
+
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Entered Bed Clickable Area " + name);
     }
+
     private void OnMouseExit()
     {
-        Debug.Log("Mouse Exited Bed Clickable Area " + name );
+        Debug.Log("Mouse Exited Bed Clickable Area " + name);
     }
 
     private void OnMouseOver()
     {
-        if (!interactable)
-            return;
+        if (!interactable) return;
 
         if (Input.GetMouseButton(0))
         {
-
             if (inventory.ContainsItem(itemName))
             {
+                // Remove the required item
                 inventory.RemoveItem(inventory.GetItem(itemName));
                 Debug.Log("Screw Removed");
+
+                //  PLAY SCREW REMOVAL SOUND
+                PlayScrewRemoveSFX();
+
                 interactable = false;
                 bedLeg.canRemove = true;
+
+                // Disable screw object
                 gameObject.SetActive(false);
             }
             else
@@ -53,20 +69,7 @@ public class Screw : MonoBehaviour, IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        //if (!interactable || !mouseOver)
-        //    return;
-        //if (inventory.ContainsItem(itemName))
-        //{
-        //    inventory.RemoveItem(inventory.GetItem(itemName));
-        //    Debug.Log("Screw Removed");
-        //    interactable = false;
-        //    bedLeg.canRemove = true;
-        //    gameObject.SetActive(false);
-        //}
-        //else
-        //{
-        //    Debug.Log("Cannot Remove screw, required item not present");
-        //}
+        // Interaction done via mouse clicks only
     }
 
     public TextMeshProUGUI messageText;
@@ -80,12 +83,10 @@ public class Screw : MonoBehaviour, IInteractable
 
     private IEnumerator FadeMessage(float duration)
     {
-        // Reset alpha to fully visible
         Color c = messageText.color;
         c.a = 1;
         messageText.color = c;
 
-        // Fade out over time
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -94,8 +95,21 @@ public class Screw : MonoBehaviour, IInteractable
             messageText.color = c;
             yield return null;
         }
-
-        // Hide once fully faded
         messageText.gameObject.SetActive(false);
+    }
+
+    // ---------------------------
+    // AUDIO FUNCTION
+    // ---------------------------
+    private void PlayScrewRemoveSFX()
+    {
+        if (audioSource != null && screwRemoveSFX != null)
+        {
+            audioSource.PlayOneShot(screwRemoveSFX, screwVolume);
+        }
+        else
+        {
+            Debug.LogWarning("[Screw] Missing AudioSource or screwRemoveSFX!");
+        }
     }
 }

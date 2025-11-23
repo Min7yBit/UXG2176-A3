@@ -1907,11 +1907,11 @@ MonoBehaviour:
   intervals: 4
   rotationDuration: 0.25
   currentStepIndex: 0
-  audioSource: {fileID: 0}
-  pickUpSFX: {fileID: 0}
-  clickRotateSFX: {fileID: 0}
-  pickUpVolume: 1
-  clickVolume: 1
+  audioSource: {fileID: 1925355366}
+  pickUpSFX: {fileID: 8300000, guid: 2cc99b1fabdfd4240ae1122ed31cb642, type: 3}
+  clickRotateSFX: {fileID: 8300000, guid: 6b59e807210318f4fbcd7174e3ac2087, type: 3}
+  pickUpVolume: 0.6
+  clickVolume: 0.6
   uIManager: {fileID: 1296636135}
 --- !u!1 &472033790
 GameObject:
@@ -3933,9 +3933,9 @@ MonoBehaviour:
   intervals: 10
   rotationDuration: 0.25
   currentStepIndex: 0
-  audioSource: {fileID: 0}
-  spinSFX: {fileID: 0}
-  spinVolume: 1
+  audioSource: {fileID: 1925355366}
+  spinSFX: {fileID: 8300000, guid: eac434efa1af01f4baed2aef4126a488, type: 3}
+  spinVolume: 0.6
 --- !u!1 &615633609
 GameObject:
   m_ObjectHideFlags: 0
@@ -4925,6 +4925,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Coin
+  audioSource: {fileID: 1925355366}
+  screwRemoveSFX: {fileID: 8300000, guid: db98a2b1aca411a48bba31fcfc12d8d2, type: 3}
+  screwVolume: 0.38
   bedLeg: {fileID: 1328777433}
   inventory: {fileID: 1778727711}
   messageText: {fileID: 690660724}
@@ -5391,9 +5394,9 @@ MonoBehaviour:
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1543531051}
   potato: {fileID: 390939652}
-  audioSource: {fileID: 0}
-  trayOpenSFX: {fileID: 0}
-  trayOpenVolume: 1
+  audioSource: {fileID: 1925355366}
+  trayOpenSFX: {fileID: 8300000, guid: 976591fc45abc8542bae610993fe88c6, type: 3}
+  trayOpenVolume: 0.59
   childTransforms: []
 --- !u!65 &861724884
 BoxCollider:
@@ -6736,7 +6739,7 @@ MonoBehaviour:
   mirrorShardCol: {fileID: 1261328030}
   audioSource: {fileID: 1925355366}
   doorOpenSFX: {fileID: 8300000, guid: f8dcf780d36946041a5fe9f0a037720f, type: 3}
-  doorOpenVolume: 0.65
+  doorOpenVolume: 0.59
   messageText: {fileID: 690660724}
 --- !u!65 &1137107978
 BoxCollider:
@@ -7458,6 +7461,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canRemove: 0
   playerMovement: {fileID: 1778727708}
+  audioSource: {fileID: 1925355366}
+  pickupSFX: {fileID: 8300000, guid: 2cc99b1fabdfd4240ae1122ed31cb642, type: 3}
+  pickupVolume: 0.5
   messageText: {fileID: 690660724}
 --- !u!1 &1335987386
 GameObject:
@@ -9617,6 +9623,9 @@ MonoBehaviour:
   lockCombination2: {fileID: 1866958218}
   lockCombination3: {fileID: 1960738473}
   manager: {fileID: 1296636135}
+  audioSource: {fileID: 1925355366}
+  winSFX: {fileID: 8300000, guid: c21b69ab1a47af04bb98126cff26f475, type: 3}
+  winVolume: 0.77
 --- !u!1 &1726437360
 GameObject:
   m_ObjectHideFlags: 0
@@ -10840,9 +10849,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1422208283}
-  audioSource: {fileID: 0}
-  bedEnterSFX: {fileID: 0}
-  bedEnterVolume: 1
+  audioSource: {fileID: 1925355366}
+  bedEnterSFX: {fileID: 8300000, guid: 2cc99b1fabdfd4240ae1122ed31cb642, type: 3}
+  bedEnterVolume: 0.7
   childTransforms: []
   playerLocation: {fileID: 1815763346}
 --- !u!1 &1815763345
@@ -11411,9 +11420,9 @@ MonoBehaviour:
   intervals: 10
   rotationDuration: 0.25
   currentStepIndex: 0
-  audioSource: {fileID: 0}
-  spinSFX: {fileID: 0}
-  spinVolume: 1
+  audioSource: {fileID: 1925355366}
+  spinSFX: {fileID: 8300000, guid: eac434efa1af01f4baed2aef4126a488, type: 3}
+  spinVolume: 0.6
 --- !u!1 &1867838316
 GameObject:
   m_ObjectHideFlags: 0
@@ -11469,7 +11478,7 @@ MonoBehaviour:
   interactable: 1
   audioSource: {fileID: 1925355366}
   shatterSFX: {fileID: 8300000, guid: 7269f285470e668459f98ffd57aa15ed, type: 3}
-  shatterVolume: 0.71
+  shatterVolume: 0.36
   messageText: {fileID: 690660724}
 --- !u!135 &1867838319
 SphereCollider:
@@ -12010,9 +12019,9 @@ MonoBehaviour:
   intervals: 10
   rotationDuration: 0.25
   currentStepIndex: 0
-  audioSource: {fileID: 0}
-  spinSFX: {fileID: 0}
-  spinVolume: 1
+  audioSource: {fileID: 1925355366}
+  spinSFX: {fileID: 8300000, guid: eac434efa1af01f4baed2aef4126a488, type: 3}
+  spinVolume: 0.6
 --- !u!1 &1963286886
 GameObject:
   m_ObjectHideFlags: 0

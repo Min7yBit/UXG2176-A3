@@ -17,8 +17,8 @@ public class PosterReveal : MonoBehaviour, IInteractable
     [SerializeField] private UIManager uIManager;
 
     [Header("Tear SFX")]
-    [SerializeField] private AudioSource audioSource;   // assign your SFX AudioSource
-    [SerializeField] private AudioClip tearSFX;         // assign the tear sound
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip tearSFX;
     [Range(0f, 2f)] public float tearVolume = 1f;
 
     private bool interactable = true;
@@ -56,6 +56,10 @@ public class PosterReveal : MonoBehaviour, IInteractable
 
         if (Input.GetMouseButtonDown(0))
         {
+            //  Play SFX **RIGHT WHEN CLICKED**
+            PlayTearSFX();
+
+            // Start animation
             StartCoroutine(FlipPoster());
         }
     }
@@ -85,9 +89,6 @@ public class PosterReveal : MonoBehaviour, IInteractable
 
         Debug.Log("Poster flipped, hint revealed.");
         uIManager.UpdateHintsCount();
-
-        // Play tear SFX at the END of the flip
-        PlayTearSFX();
     }
 
     private void PlayTearSFX()
@@ -100,6 +101,6 @@ public class PosterReveal : MonoBehaviour, IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        // Not used in this interaction pattern
+        // Not used for poster
     }
 }
