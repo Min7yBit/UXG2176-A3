@@ -10222,6 +10222,9 @@ MonoBehaviour:
   invSlotTransform: {fileID: 543580821}
   inventoryUIParent: {fileID: 560479562}
   currentSelectedSlotIndex: 0
+  audioSource: {fileID: 1925355366}
+  pickupSFX: {fileID: 8300000, guid: 39ef4cd6eec603f449ec22b9f641cae3, type: 3}
+  pickupVolume: 0.35
 --- !u!114 &1778727712
 MonoBehaviour:
   m_ObjectHideFlags: 0
