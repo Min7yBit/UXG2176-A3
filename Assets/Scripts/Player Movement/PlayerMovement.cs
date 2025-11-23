@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
     private float inputX;
     private float inputZ;
     private bool jumpPressed;
+
+    public UnityEvent OnJumpEvent;
 
     void Start()
     {
@@ -113,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = vel;
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+            OnJumpEvent?.Invoke();
         }
 
         jumpPressed = false; // reset after applying
@@ -121,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
     // -------------------------------------------------------
     // GROUND CHECK
     // -------------------------------------------------------
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     }
