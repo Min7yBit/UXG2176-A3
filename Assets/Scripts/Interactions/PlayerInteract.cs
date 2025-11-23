@@ -26,11 +26,14 @@ public class PlayerInteract : MonoBehaviour
         IInteractable interactable = GetInteractableObject();
         if (interactable != null)
         {
-            // UI to appear to show can interact
-            if (interactPromptGO != null)
+            if (interactable.ShowPrompt && !interactable.InInteract)
             {
-                interactPrompt.text = "Press E to Interact";
-                interactPromptGO.SetActive(true);
+                // UI to appear to show can interact
+                if (interactPromptGO != null)
+                {
+                    interactPrompt.text = "Press LMB to interact with " + interactable.Name;
+                    interactPromptGO.SetActive(true);
+                }
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {

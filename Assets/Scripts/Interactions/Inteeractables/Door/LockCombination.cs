@@ -6,7 +6,7 @@ public class LockCombination : MonoBehaviour, IInteractable
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
-
+    public bool ShowPrompt { get; set; } = true;
     private bool interactable = false;
 
     public int winIndex = 0; //set this individually in inspector to define the correct combination

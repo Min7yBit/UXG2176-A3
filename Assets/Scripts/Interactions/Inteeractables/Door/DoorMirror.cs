@@ -5,6 +5,7 @@ public class DoorMirror : MonoBehaviour, IInteractable
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
+    public bool ShowPrompt { get; set; } = true;
 
     public CameraControl cameraControl;
     public Camera cam;

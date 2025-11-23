@@ -1,10 +1,12 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class BedClickableArea : MonoBehaviour, IInteractable
 {
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
-
+    public bool ShowPrompt { get; set; } = false;
     public bool InInteract { get; set; } = false;
 
     public CameraControl cameraControl;
@@ -47,6 +49,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
             cameraControl.SwitchToFixedCamera(cam);
             col.enabled = false; //disables interaction so can interact with child components
             bedCol.enabled = false; //disables bed collider
+            ShowMessage("What's here?");
         }
     }
 
@@ -55,7 +58,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
         if (InInteract)
         {
 
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 InInteract = false;
                 col.enabled = true; //enables interaction again
@@ -66,5 +69,35 @@ public class BedClickableArea : MonoBehaviour, IInteractable
                 cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
             }
         }
+    }
+
+    public TextMeshProUGUI messageText;
+
+    public void ShowMessage(string msg, float duration = 2f)
+    {
+        messageText.text = msg;
+        messageText.gameObject.SetActive(true);
+        StartCoroutine(FadeMessage(duration));
+    }
+
+    private IEnumerator FadeMessage(float duration)
+    {
+        // Reset alpha to fully visible
+        Color c = messageText.color;
+        c.a = 1;
+        messageText.color = c;
+
+        // Fade out over time
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            c.a = Mathf.Lerp(1, 0, elapsed / duration);
+            messageText.color = c;
+            yield return null;
+        }
+
+        // Hide once fully faded
+        messageText.gameObject.SetActive(false);
     }
 }

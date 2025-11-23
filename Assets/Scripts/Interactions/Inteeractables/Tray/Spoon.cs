@@ -6,7 +6,7 @@ public class Spoon : MonoBehaviour, IInteractable
 
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
-
+    public bool ShowPrompt { get; set; } = true;
     public bool interactable;
     private Renderer Rrenderer;
     private bool mouseOver = false;
