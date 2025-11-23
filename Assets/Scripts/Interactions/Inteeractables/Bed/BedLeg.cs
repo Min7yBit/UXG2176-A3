@@ -13,6 +13,7 @@ public class BedLeg : MonoBehaviour, IInteractable
     private bool interactable;
     private Renderer Rrenderer;
     private bool mouseOver = false;
+    [SerializeField] private PlayerMovement playerMovement;
     private void Awake()
     {
         Rrenderer = GetComponent<Renderer>();
@@ -55,7 +56,7 @@ public class BedLeg : MonoBehaviour, IInteractable
             Item item = GetComponent<Item>();
             if (item != null)
             {
-                //playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
+                playerMovement.GetComponent<Inventory>().AddItem(item); //testing adding item to inventory on interact, some items may not have Item component
                 gameObject.SetActive(false); //disable the object after picking it up
             }
         }

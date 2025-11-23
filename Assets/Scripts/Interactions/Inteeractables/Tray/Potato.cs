@@ -50,6 +50,14 @@ public class Potato : MonoBehaviour, IInteractable
     {
         return transform;
     }
+    private void Update()
+    {
+        if (zoomedIn && !mouseOver && interactable && Input.GetMouseButtonDown(0)) //click anywhere but the potato to zoom out
+        {
+            interactable = false; //prevent spam
+            ZoomOut();
+        }
+    }
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Entered Potato");
@@ -58,9 +66,17 @@ public class Potato : MonoBehaviour, IInteractable
     }
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && mouseOver && zoomedIn)
+        if (Input.GetMouseButtonDown(0))
         {
-            RotateToNextInterval(); //when zoomed in, left click to rotate
+            if (mouseOver && zoomedIn)
+            {
+                RotateToNextInterval(); //when zoomed in, left click to rotate
+            }
+            else if (!zoomedIn && mouseOver && interactable) //click on the potato to zoom in
+            {
+                interactable = false; //prevent spam
+                ZoomIn();
+            }
         }
     }
     private void OnMouseExit()
@@ -73,17 +89,6 @@ public class Potato : MonoBehaviour, IInteractable
     public void OnInteract(in PlayerMovement playerMovement)
     {
         //must be in contact with it to work!!!
-
-        if (zoomedIn && !mouseOver) //click anywhere but the potato to zoom out
-        {
-            interactable = false; 
-            ZoomOut();
-        }
-        else if (!zoomedIn && mouseOver && interactable) //click on the potato to zoom in
-        {
-            interactable = false;
-            ZoomIn();
-        }
     }
 
     private void ZoomIn()
