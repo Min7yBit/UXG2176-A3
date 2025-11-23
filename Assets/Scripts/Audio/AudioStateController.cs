@@ -3,11 +3,11 @@ using UnityEngine.Audio;
 
 public class AudioStateController : MonoBehaviour
 {
-    [Header("Snapshots")]
+   
     public AudioMixerSnapshot menuSnapshot;
     public AudioMixerSnapshot gameplaySnapshot;
 
-    [Header("Transition times (seconds)")]
+   
     public float menuTransitionTime = 0.5f;
     public float gameplayTransitionTime = 1.0f;
 
