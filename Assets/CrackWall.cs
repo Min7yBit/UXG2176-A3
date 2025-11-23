@@ -84,6 +84,8 @@ public class CrackWall : MonoBehaviour, IInteractable
         if (crack != null)
             crack.SetActive(false);
 
+        gameObject.SetActive(false);
+
         uIManager.UpdateHintsCount();
     }
 
@@ -101,7 +103,7 @@ public class CrackWall : MonoBehaviour, IInteractable
                 return;
             }
 
-            // Your Inventory.ContainsItem only returns true if that item is in a SELECTED slot.
+            // Inventory.ContainsItem only returns true if that item is in a selected slot.
             if (inventory.ContainsItem(itemName))
             {
                 currentScrapes++;
