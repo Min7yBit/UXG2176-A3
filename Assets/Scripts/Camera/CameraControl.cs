@@ -12,7 +12,17 @@ public class CameraControl : MonoBehaviour
     public Camera thirdPersonCam;
     public Camera activeFixedCam;
 
+    [Header("Camera Switch SFX")]
+    public AudioSource audioSource;
 
+    public AudioClip fpvEnterSFX;
+    [Range(0f, 2f)] public float fpvEnterVolume = 1f;
+
+    public AudioClip tppEnterSFX;
+    [Range(0f, 2f)] public float tppEnterVolume = 1f;
+
+    public AudioClip fixedEnterSFX;
+    [Range(0f, 2f)] public float fixedEnterVolume = 1f;
 
     void Start()
     {
@@ -21,19 +31,34 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
-        // Toggle manually
         if (Input.GetKeyDown(KeyCode.Alpha1))
             SetCameraMode(CameraMode.FirstPerson);
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
             SetCameraMode(CameraMode.ThirdPerson);
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
             SetCameraMode(CameraMode.Fixed);
     }
 
     public void SetCameraMode(CameraMode mode)
     {
+        //  SFX When switching modes
+        if (mode != currentMode)
+        {
+            if (mode == CameraMode.FirstPerson)
+                PlaySFX(fpvEnterSFX, fpvEnterVolume);
+
+            else if (mode == CameraMode.ThirdPerson)
+                PlaySFX(tppEnterSFX, tppEnterVolume);
+
+            else if (mode == CameraMode.Fixed)
+                PlaySFX(fixedEnterSFX, fixedEnterVolume);
+        }
+
         currentMode = mode;
 
+        // Enable the correct cameras
         firstPersonCam.enabled = (mode == CameraMode.FirstPerson);
         thirdPersonCam.enabled = (mode == CameraMode.ThirdPerson);
 
@@ -43,7 +68,6 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            // disable all fixed cams
             foreach (var cam in FindObjectsByType<Camera>(FindObjectsSortMode.None))
             {
                 if (cam.CompareTag("FixedCamera"))
@@ -52,7 +76,6 @@ public class CameraControl : MonoBehaviour
         }
     }
 
-    // Called by triggers when entering fixed camera zones
     public void SwitchToFixedCamera(Camera newCam)
     {
         if (activeFixedCam != null)
@@ -60,5 +83,14 @@ public class CameraControl : MonoBehaviour
 
         activeFixedCam = newCam;
         SetCameraMode(CameraMode.Fixed);
+    }
+
+    // --------------------
+    // Audio Helper
+    // --------------------
+    private void PlaySFX(AudioClip clip, float volume)
+    {
+        if (audioSource != null && clip != null)
+            audioSource.PlayOneShot(clip, volume);
     }
 }

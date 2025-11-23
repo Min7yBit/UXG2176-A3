@@ -9842,6 +9842,13 @@ MonoBehaviour:
   firstPersonCam: {fileID: 984976686}
   thirdPersonCam: {fileID: 25400010}
   activeFixedCam: {fileID: 560960779}
+  audioSource: {fileID: 1925355366}
+  fpvEnterSFX: {fileID: 8300000, guid: d53b6060c61d98a4aaba3e32409d209d, type: 3}
+  fpvEnterVolume: 0.3
+  tppEnterSFX: {fileID: 8300000, guid: d53b6060c61d98a4aaba3e32409d209d, type: 3}
+  tppEnterVolume: 0.3
+  fixedEnterSFX: {fileID: 8300000, guid: d53b6060c61d98a4aaba3e32409d209d, type: 3}
+  fixedEnterVolume: 0.05
 --- !u!1 &1741185999
 GameObject:
   m_ObjectHideFlags: 0
@@ -10389,7 +10396,7 @@ MonoBehaviour:
   inventoryUIParent: {fileID: 560479562}
   currentSelectedSlotIndex: 0
   audioSource: {fileID: 1925355366}
-  pickupSFX: {fileID: 8300000, guid: 39ef4cd6eec603f449ec22b9f641cae3, type: 3}
+  pickupSFX: {fileID: 8300000, guid: 9192bc503d6fe8644a0c8fd39b489b23, type: 3}
   pickupVolume: 0.35
 --- !u!114 &1778727712
 MonoBehaviour:
@@ -10850,8 +10857,8 @@ MonoBehaviour:
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1422208283}
   audioSource: {fileID: 1925355366}
-  bedEnterSFX: {fileID: 8300000, guid: 2cc99b1fabdfd4240ae1122ed31cb642, type: 3}
-  bedEnterVolume: 0.7
+  bedEnterSFX: {fileID: 8300000, guid: d53b6060c61d98a4aaba3e32409d209d, type: 3}
+  bedEnterVolume: 0.23
   childTransforms: []
   playerLocation: {fileID: 1815763346}
 --- !u!1 &1815763345
