@@ -6382,6 +6382,10 @@ PrefabInstance:
       value: poster
       objectReference: {fileID: 0}
     - target: {fileID: 6971571394025640556, guid: ef606e4bbe6a2074ab33ebad8f4ab7da, type: 3}
+      propertyPath: m_Name
+      value: Poster
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971571394025640556, guid: ef606e4bbe6a2074ab33ebad8f4ab7da, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -11575,6 +11579,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6c51860e802638d47afe84e910244b68, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971571394025640556, guid: 6c51860e802638d47afe84e910244b68, type: 3}
+      propertyPath: m_Name
+      value: Crack in the wall
       objectReference: {fileID: 0}
     - target: {fileID: 6971571394025640556, guid: 6c51860e802638d47afe84e910244b68, type: 3}
       propertyPath: m_IsActive
