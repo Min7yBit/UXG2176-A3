@@ -6292,6 +6292,9 @@ MonoBehaviour:
   flipDuration: 0.4
   flipAxis: {x: 0, y: 1, z: 0}
   uIManager: {fileID: 1296636135}
+  audioSource: {fileID: 1925355366}
+  tearSFX: {fileID: 8300000, guid: 75a54b0233cc2224ba46fe144dcd60aa, type: 3}
+  tearVolume: 0.69
 --- !u!1 &1078766332
 GameObject:
   m_ObjectHideFlags: 0
@@ -6580,6 +6583,9 @@ MonoBehaviour:
   itemName: MirrorShard
   inventory: {fileID: 1778727711}
   mirrorShardCol: {fileID: 1261328030}
+  audioSource: {fileID: 1925355366}
+  doorOpenSFX: {fileID: 8300000, guid: f8dcf780d36946041a5fe9f0a037720f, type: 3}
+  doorOpenVolume: 0.65
   messageText: {fileID: 0}
 --- !u!65 &1137107978
 BoxCollider:
@@ -11272,6 +11278,9 @@ MonoBehaviour:
   mirrorMess: {fileID: 1685679866}
   inventory: {fileID: 1778727711}
   interactable: 1
+  audioSource: {fileID: 1925355366}
+  shatterSFX: {fileID: 8300000, guid: 7269f285470e668459f98ffd57aa15ed, type: 3}
+  shatterVolume: 0.71
   messageText: {fileID: 0}
 --- !u!135 &1867838319
 SphereCollider:
@@ -11428,6 +11437,11 @@ MonoBehaviour:
   crack: {fileID: 1876238620}
   inventory: {fileID: 1778727711}
   uIManager: {fileID: 1296636135}
+  audioSource: {fileID: 1925355366}
+  scrapeSFX: {fileID: 8300000, guid: b2c243a543174f64783233ad3b34c9bf, type: 3}
+  breakSFX: {fileID: 8300000, guid: 41a4110f887f66b47a395143c6b1b0d6, type: 3}
+  scrapeVolume: 0.6
+  breakVolume: 0.72
   messageText: {fileID: 0}
 --- !u!1 &1891881652
 GameObject:

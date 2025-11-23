@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CrackWall : MonoBehaviour, IInteractable
@@ -8,42 +7,39 @@ public class CrackWall : MonoBehaviour, IInteractable
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
-
     public bool ShowPrompt { get; set; } = true;
 
     [Header("Required Item")]
-    [Tooltip("Name of item required to scrape the wall.")]
     public string itemName = "Spoon";
 
     [Header("Scrape Settings")]
-    [Tooltip("How many diggity digs (clicks) before the wall breaks.")]
     public int scrapesNeeded = 3;
     private int currentScrapes = 0;
 
     [Header("Cell / Wall Objects")]
-    [Tooltip("The default ver.")]
     [SerializeField] private GameObject intactCell;
-    [Tooltip("The hole ver")]
     [SerializeField] private GameObject holedCell;
-    [Tooltip("Hint object to reveal after wall is broken.")]
     [SerializeField] private GameObject hintObject;
     [SerializeField] private GameObject crack;
 
-    [Header("Assing Player Inventory")]
+    [Header("Player Inventory")]
     [SerializeField] private Inventory inventory;
     [SerializeField] private UIManager uIManager;
+
+    [Header("Scrape SFX")]
+    public AudioSource audioSource;
+    public AudioClip scrapeSFX;       // sound each time spoon scrapes
+    public AudioClip breakSFX;        // optional break sound
+    [Range(0f, 2f)] public float scrapeVolume = 1f;
+    [Range(0f, 2f)] public float breakVolume = 1f;
 
     private bool interactable = true;
     private bool mouseOver = false;
 
-    public Transform GetTransform()
-    {
-        return transform;
-    }
+    public Transform GetTransform() => transform;
 
     private void Awake()
     {
-        // Ensure starting state is correct
         if (intactCell != null) intactCell.SetActive(true);
         if (holedCell != null) holedCell.SetActive(false);
         if (hintObject != null) hintObject.SetActive(false);
@@ -52,13 +48,13 @@ public class CrackWall : MonoBehaviour, IInteractable
     private void OnMouseEnter()
     {
         mouseOver = true;
-        Debug.Log("Mouse Entered CrackWall area " );
+        Debug.Log("Mouse Entered CrackWall area");
     }
 
     private void OnMouseExit()
     {
         mouseOver = false;
-        Debug.Log("Mouse Exited CrackWall area " );
+        Debug.Log("Mouse Exited CrackWall area");
     }
 
     private void OnMouseOver()
@@ -68,7 +64,7 @@ public class CrackWall : MonoBehaviour, IInteractable
 
     private void RevealHint()
     {
-        Debug.Log("Wall broken, revealing hole and Hint.");
+        Debug.Log("Wall broken, revealing hole and hint.");
 
         interactable = false;
 
@@ -84,8 +80,10 @@ public class CrackWall : MonoBehaviour, IInteractable
         if (crack != null)
             crack.SetActive(false);
 
-        gameObject.SetActive(false);
+        // PLAY BREAK SOUND
+        PlayBreakSFX();
 
+        gameObject.SetActive(false);
         uIManager.UpdateHintsCount();
     }
 
@@ -94,7 +92,6 @@ public class CrackWall : MonoBehaviour, IInteractable
         if (!interactable)
             return;
 
-        // Left click while hovering
         if (Input.GetMouseButtonDown(0) && mouseOver)
         {
             if (inventory == null)
@@ -103,11 +100,13 @@ public class CrackWall : MonoBehaviour, IInteractable
                 return;
             }
 
-            // Inventory.ContainsItem only returns true if that item is in a selected slot.
             if (inventory.ContainsItem(itemName))
             {
                 currentScrapes++;
                 Debug.Log($"Scraping wall with {itemName}... ({currentScrapes}/{scrapesNeeded})");
+
+                //  PLAY SCRAPE SFX
+                PlayScrapeSFX();
 
                 if (currentScrapes >= scrapesNeeded)
                 {
@@ -122,6 +121,26 @@ public class CrackWall : MonoBehaviour, IInteractable
         }
     }
 
+    // -------------------------
+    // SCRAPE SFX PLAYBACK
+    // -------------------------
+    private void PlayScrapeSFX()
+    {
+        if (audioSource != null && scrapeSFX != null)
+            audioSource.PlayOneShot(scrapeSFX, scrapeVolume);
+        else
+            Debug.LogWarning("[CrackWall] Missing AudioSource or scrapeSFX!");
+    }
+
+    private void PlayBreakSFX()
+    {
+        if (audioSource != null && breakSFX != null)
+            audioSource.PlayOneShot(breakSFX, breakVolume);
+    }
+
+    // -------------------------
+    // MESSAGE UI
+    // -------------------------
     public TextMeshProUGUI messageText;
 
     public void ShowMessage(string msg, float duration = 2f)
@@ -133,12 +152,10 @@ public class CrackWall : MonoBehaviour, IInteractable
 
     private IEnumerator FadeMessage(float duration)
     {
-        // Reset alpha to fully visible
         Color c = messageText.color;
         c.a = 1;
         messageText.color = c;
 
-        // Fade out over time
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -148,7 +165,6 @@ public class CrackWall : MonoBehaviour, IInteractable
             yield return null;
         }
 
-        // Hide once fully faded
         messageText.gameObject.SetActive(false);
     }
 }

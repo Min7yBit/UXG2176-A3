@@ -7,15 +7,19 @@ public class PosterReveal : MonoBehaviour, IInteractable
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
     public bool ShowPrompt { get; set; } = true;
+
     [Header("Hint Behind Poster")]
-    [SerializeField] private GameObject hintObject;  
+    [SerializeField] private GameObject hintObject;
 
     [Header("Flip Settings")]
-    [Tooltip("Amount of seconds for the poster to flip 180 degrees.")]
     [SerializeField] private float flipDuration = 0.4f;
-    [Tooltip("Axis to flip around.")]
     [SerializeField] private Vector3 flipAxis = new Vector3(0f, 1f, 0f);
     [SerializeField] private UIManager uIManager;
+
+    [Header("Tear SFX")]
+    [SerializeField] private AudioSource audioSource;   // assign your SFX AudioSource
+    [SerializeField] private AudioClip tearSFX;         // assign the tear sound
+    [Range(0f, 2f)] public float tearVolume = 1f;
 
     private bool interactable = true;
     private bool hasFlipped = false;
@@ -37,14 +41,12 @@ public class PosterReveal : MonoBehaviour, IInteractable
 
     private void OnMouseEnter()
     {
-        Debug.Log("Mouse Entered Poster area: " );
-        
+        Debug.Log("Mouse Entered Poster area");
     }
 
     private void OnMouseExit()
     {
-        Debug.Log("Mouse Exited Poster area: " );
-       
+        Debug.Log("Mouse Exited Poster area");
     }
 
     private void OnMouseOver()
@@ -81,12 +83,23 @@ public class PosterReveal : MonoBehaviour, IInteractable
         if (hintObject != null)
             hintObject.SetActive(true);
 
-        Debug.Log("Poster flipped, hint revealed.");        
+        Debug.Log("Poster flipped, hint revealed.");
         uIManager.UpdateHintsCount();
+
+        // Play tear SFX at the END of the flip
+        PlayTearSFX();
+    }
+
+    private void PlayTearSFX()
+    {
+        if (audioSource != null && tearSFX != null)
+            audioSource.PlayOneShot(tearSFX, tearVolume);
+        else
+            Debug.LogWarning("[PosterReveal] Missing AudioSource or tearSFX!");
     }
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        
+        // Not used in this interaction pattern
     }
 }

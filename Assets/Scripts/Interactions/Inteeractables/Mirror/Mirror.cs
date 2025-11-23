@@ -9,33 +9,45 @@ public class Mirror : MonoBehaviour, IInteractable
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
     public bool ShowPrompt { get; set; } = true;
+
+    [Header("Interaction / Inventory")]
     public string itemName;
     [SerializeField] private Item shardItem;
     [SerializeField] private GameObject mirrorMess;
     [SerializeField] private Inventory inventory;
     [SerializeField] private bool interactable;
-    //private Renderer Rrenderer;
+
+    [Header("Shatter SFX")]
+    [SerializeField] private AudioSource audioSource;   // assign in Inspector
+    [SerializeField] private AudioClip shatterSFX;      // glass breaking sound
+    [Range(0f, 2f)] public float shatterVolume = 1f;
+
     private bool mouseOver = false;
+
+    public TextMeshProUGUI messageText;
+
     private void Awake()
     {
-        //Rrenderer = GetComponent<Renderer>();
+        // optional: renderer stuff if you re-enable it later
     }
+
     public Transform GetTransform()
     {
         return transform;
     }
+
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Entered " + name);
-        //Rrenderer.material.color = Color.yellow;
         mouseOver = true;
     }
+
     private void OnMouseExit()
     {
         Debug.Log("Mouse Exited " + name);
-        //Rrenderer.material.color = Color.white;
         mouseOver = false;
     }
+
     public void OnInteract(in PlayerMovement playerMovement)
     {
         Debug.Log("Attempting to interact with " + name);
@@ -44,14 +56,18 @@ public class Mirror : MonoBehaviour, IInteractable
 
         Debug.Log("Interacted with " + name);
 
-        if (inventory.ContainsItem(itemName) && shardItem != null) //make sure bedleg item is in inventory
+        if (inventory.ContainsItem(itemName) && shardItem != null) // has bed leg, can break
         {
-            //Koon:can add sfx here
-            inventory.RemoveItem(inventory.GetItem(itemName)); //remove bed leg item from inventory
-            playerMovement.GetComponent<Inventory>().AddItem(shardItem); //testing adding item to inventory on interact, some items may not have Item component
+            //  PLAY SHATTER SFX HERE
+            PlayShatterSFX();
+
+            inventory.RemoveItem(inventory.GetItem(itemName));              // remove bed leg
+            playerMovement.GetComponent<Inventory>().AddItem(shardItem);    // add shard
             interactable = false;
-            mirrorMess.SetActive(true); //show the mirror mess
-            gameObject.SetActive(false); //disable the object after picking it up
+
+            mirrorMess.SetActive(true);     // show broken mirror
+            gameObject.SetActive(false);    // hide this mirror
+
             Debug.Log("Mirror Broken");
         }
         else
@@ -61,7 +77,17 @@ public class Mirror : MonoBehaviour, IInteractable
         }
     }
 
-    public TextMeshProUGUI messageText;
+    private void PlayShatterSFX()
+    {
+        if (audioSource != null && shatterSFX != null)
+        {
+            audioSource.PlayOneShot(shatterSFX, shatterVolume);
+        }
+        else
+        {
+            Debug.LogWarning("[Mirror] Missing AudioSource or shatterSFX clip.");
+        }
+    }
 
     public void ShowMessage(string msg, float duration = 2f)
     {
@@ -72,12 +98,10 @@ public class Mirror : MonoBehaviour, IInteractable
 
     private IEnumerator FadeMessage(float duration)
     {
-        // Reset alpha to fully visible
         Color c = messageText.color;
         c.a = 1;
         messageText.color = c;
 
-        // Fade out over time
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -87,7 +111,6 @@ public class Mirror : MonoBehaviour, IInteractable
             yield return null;
         }
 
-        // Hide once fully faded
         messageText.gameObject.SetActive(false);
     }
 }

@@ -8,6 +8,7 @@ public class Door : MonoBehaviour, IInteractable
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
     public bool ShowPrompt { get; set; } = true;
+
     public CameraControl cameraControl;
     public Camera cam;
     public GameObject lockReflection;
@@ -19,8 +20,13 @@ public class Door : MonoBehaviour, IInteractable
 
     private PlayerMovement playerMovement;
     private bool interactable = true;
-    [SerializeField]private Inventory inventory;
+    [SerializeField] private Inventory inventory;
     [SerializeField] private Collider mirrorShardCol;
+
+    [Header("Door Open SFX")]
+    public AudioSource audioSource;        // assign in inspector
+    public AudioClip doorOpenSFX;          // assign your door sound
+    [Range(0f, 2f)] public float doorOpenVolume = 1f;
 
     public Transform GetTransform()
     {
@@ -28,17 +34,25 @@ public class Door : MonoBehaviour, IInteractable
     }
 
     public void OnInteract(in PlayerMovement playerMovement)
-    {        
+    {
         if (inventory.ContainsItem(itemName))
         {
+            // ---------------------------
+            // PLAY DOOR OPEN SFX HERE
+            // ---------------------------
+            PlayDoorOpenSFX();
+
             InInteract = true;
             lockReflection.SetActive(true);
             mirrorShardCol.enabled = true;
             interactable = false;
+
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
             this.playerMovement = playerMovement;
             this.playerMovement.CanMove = false;
+
             cameraControl.SwitchToFixedCamera(cam);
         }
         else
@@ -47,6 +61,7 @@ public class Door : MonoBehaviour, IInteractable
             ShowMessage("I can't see the lock...", 2);
         }
     }
+
     private void Update()
     {
         if (InInteract)
@@ -55,15 +70,32 @@ public class Door : MonoBehaviour, IInteractable
             {
                 InInteract = false;
                 mirrorShardCol.enabled = false;
+
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+
                 interactable = true;
                 playerMovement.CanMove = true;
+
                 cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
             }
         }
     }
 
+    // -------------------------------------------------------
+    // SFX METHOD
+    // -------------------------------------------------------
+    private void PlayDoorOpenSFX()
+    {
+        if (audioSource != null && doorOpenSFX != null)
+        {
+            audioSource.PlayOneShot(doorOpenSFX, doorOpenVolume);
+        }
+    }
+
+    // -------------------------------------------------------
+    // UI MESSAGE
+    // -------------------------------------------------------
     public TextMeshProUGUI messageText;
 
     public void ShowMessage(string msg, float duration = 2f)
@@ -75,12 +107,10 @@ public class Door : MonoBehaviour, IInteractable
 
     private IEnumerator FadeMessage(float duration)
     {
-        // Reset alpha to fully visible
         Color c = messageText.color;
         c.a = 1;
         messageText.color = c;
 
-        // Fade out over time
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -90,7 +120,6 @@ public class Door : MonoBehaviour, IInteractable
             yield return null;
         }
 
-        // Hide once fully faded
         messageText.gameObject.SetActive(false);
     }
 }
