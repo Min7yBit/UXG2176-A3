@@ -15,6 +15,7 @@ public class PosterReveal : MonoBehaviour, IInteractable
     [SerializeField] private float flipDuration = 0.4f;
     [Tooltip("Axis to flip around.")]
     [SerializeField] private Vector3 flipAxis = new Vector3(0f, 1f, 0f);
+    [SerializeField] private UIManager uIManager;
 
     private bool interactable = true;
     private bool hasFlipped = false;
@@ -80,7 +81,8 @@ public class PosterReveal : MonoBehaviour, IInteractable
         if (hintObject != null)
             hintObject.SetActive(true);
 
-        Debug.Log("Poster flipped, hint revealed.");
+        Debug.Log("Poster flipped, hint revealed.");        
+        uIManager.UpdateHintsCount();
     }
 
     public void OnInteract(in PlayerMovement playerMovement)
