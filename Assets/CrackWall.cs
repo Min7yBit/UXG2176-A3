@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CrackWall : MonoBehaviour, IInteractable
@@ -22,11 +23,13 @@ public class CrackWall : MonoBehaviour, IInteractable
     [SerializeField] private GameObject holedCell;
     [Tooltip("Hint object to reveal after wall is broken.")]
     [SerializeField] private GameObject hintObject;
+    [SerializeField] private GameObject crack;
 
     [Header("Assing Player Inventory")]
     [SerializeField] private Inventory inventory;
 
     private bool interactable = true;
+    private bool mouseOver = false;
 
     public Transform GetTransform()
     {
@@ -43,21 +46,47 @@ public class CrackWall : MonoBehaviour, IInteractable
 
     private void OnMouseEnter()
     {
+        mouseOver = true;
         Debug.Log("Mouse Entered CrackWall area " );
     }
 
     private void OnMouseExit()
     {
+        mouseOver = false;
         Debug.Log("Mouse Exited CrackWall area " );
     }
 
     private void OnMouseOver()
     {
+        mouseOver = true;
+    }
+
+    private void RevealHint()
+    {
+        Debug.Log("Wall broken, revealing hole and Hint.");
+
+        interactable = false;
+
+        if (intactCell != null)
+            intactCell.SetActive(false);
+
+        if (holedCell != null)
+            holedCell.SetActive(true);
+
+        if (hintObject != null)
+            hintObject.SetActive(true);
+
+        if (crack != null)
+            crack.SetActive(false);       
+    }
+
+    public void OnInteract(in PlayerMovement playerMovement)
+    {
         if (!interactable)
             return;
 
         // Left click while hovering
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && mouseOver)
         {
             if (inventory == null)
             {
@@ -81,28 +110,5 @@ public class CrackWall : MonoBehaviour, IInteractable
                 Debug.Log($"Cannot scrape wall, required item not selected: {itemName}");
             }
         }
-    }
-
-    private void RevealHint()
-    {
-        Debug.Log("Wall broken, revealing hole and Hint.");
-
-        interactable = false;
-
-        if (intactCell != null)
-            intactCell.SetActive(false);
-
-        if (holedCell != null)
-            holedCell.SetActive(true);
-
-        if (hintObject != null)
-            hintObject.SetActive(true);
-
-       
-    }
-
-    public void OnInteract(in PlayerMovement playerMovement)
-    {
-       
     }
 }
