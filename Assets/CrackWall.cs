@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -6,6 +8,8 @@ public class CrackWall : MonoBehaviour, IInteractable
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
+
+    public bool ShowPrompt { get; set; } = true;
 
     [Header("Required Item")]
     [Tooltip("Name of item required to scrape the wall.")]
@@ -111,7 +115,38 @@ public class CrackWall : MonoBehaviour, IInteractable
             else
             {
                 Debug.Log($"Cannot scrape wall, required item not selected: {itemName}");
+                ShowMessage($"Cannot scrape wall, required item not selected: {itemName}");
             }
         }
+    }
+
+    public TextMeshProUGUI messageText;
+
+    public void ShowMessage(string msg, float duration = 2f)
+    {
+        messageText.text = msg;
+        messageText.gameObject.SetActive(true);
+        StartCoroutine(FadeMessage(duration));
+    }
+
+    private IEnumerator FadeMessage(float duration)
+    {
+        // Reset alpha to fully visible
+        Color c = messageText.color;
+        c.a = 1;
+        messageText.color = c;
+
+        // Fade out over time
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            c.a = Mathf.Lerp(1, 0, elapsed / duration);
+            messageText.color = c;
+            yield return null;
+        }
+
+        // Hide once fully faded
+        messageText.gameObject.SetActive(false);
     }
 }

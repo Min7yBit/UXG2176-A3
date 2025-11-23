@@ -6,7 +6,7 @@ public class PosterReveal : MonoBehaviour, IInteractable
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
-
+    public bool ShowPrompt { get; set; } = true;
     [Header("Hint Behind Poster")]
     [SerializeField] private GameObject hintObject;  
 

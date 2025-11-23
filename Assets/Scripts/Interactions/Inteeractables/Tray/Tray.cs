@@ -5,7 +5,7 @@ public class Tray : MonoBehaviour, IInteractable
 {
     public string Name => name;
     public bool CanInteract  { get => interactable; set { interactable = value; } }
-
+    public bool ShowPrompt { get; set; } = true;
     public bool InInteract { get; set; } = false;
 
     public CameraControl cameraControl;
@@ -60,7 +60,7 @@ public class Tray : MonoBehaviour, IInteractable
     {
         if (InInteract)
         {
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 InInteract = false;
                 potato.ResetPotato();

@@ -7,12 +7,14 @@ public class Bed : MonoBehaviour,IInteractable
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
+    public bool ShowPrompt { get; set; } = true;
     public CameraControl cameraControl;
     public Camera cam;
 
     private bool interactable = true;
     private PlayerMovement playerMovement;
     [SerializeField] private List<Transform> childTransforms;
+    [SerializeField] private Transform playerLocation;
 
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class Bed : MonoBehaviour,IInteractable
         Cursor.visible = true;
         this.playerMovement = playerMovement;
         this.playerMovement.CanMove = false;
+        this.playerMovement.transform.position = new Vector3(playerLocation.position.x, this.playerMovement.transform.position.y, playerLocation.position.z);
         cameraControl.SwitchToFixedCamera(cam);
     }
 
@@ -40,7 +43,7 @@ public class Bed : MonoBehaviour,IInteractable
     {
         if (InInteract)
         {
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 InInteract = false;
                 DisableChildInteraction();
