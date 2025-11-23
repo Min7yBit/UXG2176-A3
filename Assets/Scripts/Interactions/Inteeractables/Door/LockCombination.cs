@@ -1,21 +1,21 @@
 using UnityEngine;
 using System.Collections; // Required for Coroutines
 
-public class LockCombination : MonoBehaviour
+public class LockCombination : MonoBehaviour, IInteractable
 {
-    [Header("Rotation Settings")]
-    [Tooltip("Number of steps (intervals) in a full 360 rotation. (e.g., 4 means 90 degree snaps)")]
+    public string Name => name;
+    public bool CanInteract { get => interactable; set { interactable = value; } }
+    public bool InInteract { get; set; } = false;
+
+    private bool interactable = false;
+
+    public int winIndex = 0; //set this individually in inspector to define the correct combination
     public int intervals = 4;
-
-    [Tooltip("Time in seconds for each rotation step to complete.")]
     public float rotationDuration = 0.25f;
-
-    [Header("Debug/State")]
-    [SerializeField]
-    private int currentStepIndex = 0; // Tracks which step we are currently at
-
+    [SerializeField] public int currentStepIndex = 0; // Tracks which step we are currently at
     private float stepAngle;         // The angle of a single step (360 / intervals)
     private Coroutine rotateCoroutine; // Reference to the running coroutine
+    private bool isRotating = false;
 
     void Start()
     {
@@ -29,23 +29,24 @@ public class LockCombination : MonoBehaviour
         // Calculate the fixed angle for each interval
         stepAngle = 360f / intervals;
     }
-
-    void Update()
+    public Transform GetTransform()
     {
-        // Check for the Right Mouse Button press (Input.GetMouseButtonDown(1))
-        if (Input.GetMouseButtonDown(1))
+        return transform;
+    }
+    public void OnInteract(in PlayerMovement playerMovement)
+    {
+        //must be in contact with it to work!!!
+    }
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0) && CanInteract)
         {
             RotateToNextInterval();
         }
-        // For testing: Reset combination when 'R' key is pressed
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetCombination();
-        }
     }
-
     private void RotateToNextInterval()
     {
+        if (isRotating) return;
         Quaternion startRotation = transform.localRotation;
 
         // Use quaternion multiplication instead of Euler reads
@@ -63,6 +64,7 @@ public class LockCombination : MonoBehaviour
 
     IEnumerator RotateSmoothly(Quaternion startRot, Quaternion endRot)
     {
+        isRotating = true;
         float timeElapsed = 0f;
 
         while (timeElapsed < rotationDuration)
@@ -82,9 +84,12 @@ public class LockCombination : MonoBehaviour
         // Ensure the rotation lands exactly on the target angle
         transform.rotation = endRot;
         rotateCoroutine = null; // Mark the coroutine as finished
+
+        GetComponentInParent<WinCondition>().CheckWinCondition();
+        isRotating = false;
     }
 
-    private void ResetCombination()
+    public void ResetCombination()
     {
         if (rotateCoroutine != null)
         {
@@ -92,10 +97,15 @@ public class LockCombination : MonoBehaviour
         }
         Quaternion resetRotation = Quaternion.Euler(
             transform.localEulerAngles.x,
-            0f,
+            90f,
             transform.localEulerAngles.z
         );
         rotateCoroutine = StartCoroutine(RotateSmoothly(transform.rotation, resetRotation));
         currentStepIndex = 0;
+    }
+
+    public bool IsCorrectCombination()
+    {
+        return currentStepIndex == winIndex;
     }
 }

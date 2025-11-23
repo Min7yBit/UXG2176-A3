@@ -12,7 +12,7 @@ public class DoorMirror : MonoBehaviour, IInteractable
     private bool interactable = true;
     private PlayerMovement playerMovement;
     [SerializeField] private Collider doorCol;
-
+    [SerializeField] private WinCondition winCondition;
     public Transform GetTransform()
     {
         return transform;
@@ -21,6 +21,7 @@ public class DoorMirror : MonoBehaviour, IInteractable
     {   
         if (!interactable) 
             return;
+        winCondition.allowInteract = true;
         interactable = false;
         InInteract = true;
         Debug.Log("Interacted with " + name);
@@ -34,6 +35,8 @@ public class DoorMirror : MonoBehaviour, IInteractable
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
+                winCondition.allowInteract = false;
+                winCondition.ResetAllCombinations();
                 InInteract = false;
                 interactable = true;
                 doorCol.enabled = true; //enables door collider again
