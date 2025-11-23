@@ -1,15 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bed : MonoBehaviour,IInteractable
-
+public class Bed : MonoBehaviour, IInteractable
 {
     public string Name => name;
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
     public bool ShowPrompt { get; set; } = true;
+
+    [Header("Camera")]
     public CameraControl cameraControl;
     public Camera cam;
+
+    [Header("Bed Enter SFX")]
+    public AudioSource audioSource;          // assign in Inspector
+    public AudioClip bedEnterSFX;           // sound when clicking into bed
+    [Range(0f, 2f)] public float bedEnterVolume = 1f;
 
     private bool interactable = true;
     private PlayerMovement playerMovement;
@@ -18,9 +24,9 @@ public class Bed : MonoBehaviour,IInteractable
 
     private void Awake()
     {
-        //Rrenderer = GetComponent<Renderer>();
         InitiateTransformList();
     }
+
     public Transform GetTransform()
     {
         return transform;
@@ -28,14 +34,25 @@ public class Bed : MonoBehaviour,IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
+        //  play bed-enter sound when clicking into bed
+        PlayBedEnterSFX();
+
         InInteract = true;
         EnableChildInteraction();
         interactable = false;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         this.playerMovement = playerMovement;
         this.playerMovement.CanMove = false;
-        this.playerMovement.transform.position = new Vector3(playerLocation.position.x, this.playerMovement.transform.position.y, playerLocation.position.z);
+
+        // move player to correct position beside bed
+        this.playerMovement.transform.position =
+            new Vector3(playerLocation.position.x,
+                        this.playerMovement.transform.position.y,
+                        playerLocation.position.z);
+
         cameraControl.SwitchToFixedCamera(cam);
     }
 
@@ -47,34 +64,56 @@ public class Bed : MonoBehaviour,IInteractable
             {
                 InInteract = false;
                 DisableChildInteraction();
+
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+
                 interactable = true;
                 playerMovement.CanMove = true;
                 cameraControl.SetCameraMode(CameraControl.CameraMode.ThirdPerson);
             }
         }
     }
+
+    // ---------------------------
+    // SFX
+    // ---------------------------
+    private void PlayBedEnterSFX()
+    {
+        if (audioSource != null && bedEnterSFX != null)
+        {
+            audioSource.PlayOneShot(bedEnterSFX, bedEnterVolume);
+        }
+        else
+        {
+            Debug.LogWarning("[Bed] Missing AudioSource or bedEnterSFX!");
+        }
+    }
+
+    // ---------------------------
+    // Child interaction helpers
+    // ---------------------------
     private void InitiateTransformList()
     {
         childTransforms = new List<Transform>();
         Transform[] newTransformList = transform.GetComponentsInChildren<Transform>();
-        for (int i = 1; i < newTransformList.Length; i++) //start at 1 to skip the parent transform
+
+        // start at 1 to skip the parent transform
+        for (int i = 1; i < newTransformList.Length; i++)
         {
             childTransforms.Add(newTransformList[i]);
         }
 
         DisableChildInteraction();
     }
+
     private void DisableChildInteraction()
     {
         foreach (Transform child in childTransforms)
         {
             IInteractable interactableComponent = child.GetComponent<IInteractable>();
             if (interactableComponent != null)
-            {
                 interactableComponent.CanInteract = false;
-            }
         }
     }
 
@@ -84,9 +123,7 @@ public class Bed : MonoBehaviour,IInteractable
         {
             IInteractable interactableComponent = child.GetComponent<IInteractable>();
             if (interactableComponent != null)
-            {
                 interactableComponent.CanInteract = true;
-            }
         }
     }
 }

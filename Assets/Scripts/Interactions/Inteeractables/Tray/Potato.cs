@@ -7,6 +7,8 @@ public class Potato : MonoBehaviour, IInteractable
     public bool CanInteract { get => interactable; set { interactable = value; } }
     public bool InInteract { get; set; } = false;
     public bool ShowPrompt { get; set; } = true;
+
+    [Header("Zoom Settings")]
     public float zoomDuration = 1.0f;
     public Vector3 zoomedPosition;
     public Vector3 rotatePosition;
@@ -15,18 +17,25 @@ public class Potato : MonoBehaviour, IInteractable
     private Quaternion initialRotation;
 
     private Renderer Rrenderer;
-    [SerializeField]private bool mouseOver = false;
+    [SerializeField] private bool mouseOver = false;
     private bool interactable = true;
-    [SerializeField]private bool zoomedIn = false;
+    [SerializeField] private bool zoomedIn = false;
     private bool allowRotation = false;
 
     [Header("Rotation Settings")]
     public int intervals = 4;
     public float rotationDuration = 0.25f;
-    [SerializeField] private int currentStepIndex = 0; // Tracks which step we are currently at
-    private float stepAngle;         // The angle of a single step (360 / intervals)
+    [SerializeField] private int currentStepIndex = 0;
+    private float stepAngle;
     private Coroutine rotateCoroutine;
     private bool rotating = false;
+
+    [Header("SFX")]
+    public AudioSource audioSource;       // assign in inspector
+    public AudioClip pickUpSFX;           // when zooming in first time
+    public AudioClip clickRotateSFX;      // each click/rotation
+    [Range(0f, 2f)] public float pickUpVolume = 1f;
+    [Range(0f, 2f)] public float clickVolume = 1f;
 
     [SerializeField] private UIManager uIManager;
     private bool revealedHint = false;
@@ -35,53 +44,62 @@ public class Potato : MonoBehaviour, IInteractable
     {
         Rrenderer = GetComponent<Renderer>();
     }
+
     private void Start()
     {
         initialPosition = transform.localPosition;
         initialRotation = transform.localRotation;
 
-        // Safety check to prevent division by zero and nonsensical rotations
         if (intervals <= 0)
         {
             Debug.LogError("Intervals must be a positive integer!");
             intervals = 1;
         }
-        // Calculate the fixed angle for each interval
+
         stepAngle = 360f / intervals;
     }
+
     public Transform GetTransform()
     {
         return transform;
     }
+
     private void Update()
     {
-        if (zoomedIn && !mouseOver && interactable && Input.GetMouseButtonDown(0)) //click anywhere but the potato to zoom out
+        if (zoomedIn && !mouseOver && interactable && Input.GetMouseButtonDown(0))
         {
-            interactable = false; //prevent spam
+            interactable = false;
             ZoomOut();
         }
     }
+
     private void OnMouseEnter()
     {
         Debug.Log("Mouse Entered Potato");
         Rrenderer.material.color = Color.yellow;
         mouseOver = true;
     }
+
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
         {
             if (mouseOver && zoomedIn)
             {
-                RotateToNextInterval(); //when zoomed in, left click to rotate
+                // CLICK WHILE ZOOMED IN  ROTATE + CLICK SFX
+                PlayClickSFX();
+                RotateToNextInterval();
             }
-            else if (!zoomedIn && mouseOver && interactable) //click on the potato to zoom in
+            else if (!zoomedIn && mouseOver && interactable)
             {
-                interactable = false; //prevent spam
+                // FIRST PICK UP / ZOOM IN  PICKUP SFX
+                interactable = false;
+                PlayPickUpSFX();
                 ZoomIn();
             }
         }
     }
+
     private void OnMouseExit()
     {
         Debug.Log("Mouse Exited Potato");
@@ -91,7 +109,7 @@ public class Potato : MonoBehaviour, IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        //must be in contact with it to work!!!
+        // not used
     }
 
     private void ZoomIn()
@@ -99,11 +117,13 @@ public class Potato : MonoBehaviour, IInteractable
         StartCoroutine(ZoomCoroutine(transform.localPosition, zoomedPosition, zoomDuration));
         StartCoroutine(RotateCoroutine(transform.localRotation, Quaternion.Euler(rotatePosition), zoomDuration));
     }
+
     private void ZoomOut()
     {
         StartCoroutine(ZoomCoroutine(transform.localPosition, initialPosition, zoomDuration));
         StartCoroutine(RotateCoroutine(transform.localRotation, initialRotation, zoomDuration));
     }
+
     private IEnumerator ZoomCoroutine(Vector3 startPos, Vector3 endPos, float duration)
     {
         float timeElapsed = 0f;
@@ -112,19 +132,18 @@ public class Potato : MonoBehaviour, IInteractable
         {
             float t = timeElapsed / duration;
             transform.localPosition = Vector3.Lerp(startPos, endPos, t);
-
             timeElapsed += Time.deltaTime;
-
             yield return null;
         }
 
         transform.localPosition = endPos;
 
-        //toggles
-        zoomedIn = !zoomedIn; 
+        // toggles
+        zoomedIn = !zoomedIn;
         allowRotation = !allowRotation;
         interactable = true;
     }
+
     private IEnumerator RotateCoroutine(Quaternion startPos, Quaternion endPos, float duration)
     {
         float timeElapsed = 0f;
@@ -133,9 +152,7 @@ public class Potato : MonoBehaviour, IInteractable
         {
             float t = timeElapsed / duration;
             transform.localRotation = Quaternion.Lerp(startPos, endPos, t);
-
             timeElapsed += Time.deltaTime;
-
             yield return null;
         }
 
@@ -153,14 +170,11 @@ public class Potato : MonoBehaviour, IInteractable
 
     private void RotateToNextInterval()
     {
-        if (rotating)
+        if (rotating || !allowRotation)
             return;
 
         Quaternion startRotation = transform.localRotation;
-
-        // Rotate around local X axis
         Quaternion stepRotation = Quaternion.AngleAxis(stepAngle, Vector3.up);
-
         Quaternion targetRotation = startRotation * stepRotation;
 
         if (rotateCoroutine != null)
@@ -195,4 +209,18 @@ public class Potato : MonoBehaviour, IInteractable
         rotating = false;
     }
 
+    // -------------------------
+    // SFX HELPERS
+    // -------------------------
+    private void PlayPickUpSFX()
+    {
+        if (audioSource != null && pickUpSFX != null)
+            audioSource.PlayOneShot(pickUpSFX, pickUpVolume);
+    }
+
+    private void PlayClickSFX()
+    {
+        if (audioSource != null && clickRotateSFX != null)
+            audioSource.PlayOneShot(clickRotateSFX, clickVolume);
+    }
 }
