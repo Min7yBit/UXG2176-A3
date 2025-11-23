@@ -4652,6 +4652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6dfc576eea8cc8468868a4c3032a475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  messageText: {fileID: 0}
 --- !u!1 &756186587
 GameObject:
   m_ObjectHideFlags: 0
@@ -4778,6 +4779,7 @@ MonoBehaviour:
   itemName: Coin
   bedLeg: {fileID: 1328777433}
   inventory: {fileID: 1778727711}
+  messageText: {fileID: 0}
 --- !u!1 &793335989
 GameObject:
   m_ObjectHideFlags: 0
@@ -6573,9 +6575,12 @@ MonoBehaviour:
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 248024814}
   lockReflection: {fileID: 835960772}
+  interactPrompt: {fileID: 0}
+  interactPromptGO: {fileID: 0}
   itemName: MirrorShard
   inventory: {fileID: 1778727711}
   mirrorShardCol: {fileID: 1261328030}
+  messageText: {fileID: 0}
 --- !u!65 &1137107978
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7296,6 +7301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canRemove: 0
   playerMovement: {fileID: 1778727708}
+  messageText: {fileID: 0}
 --- !u!1 &1335987386
 GameObject:
   m_ObjectHideFlags: 0
@@ -9853,6 +9859,7 @@ MonoBehaviour:
   cam: {fileID: 1842719337}
   col: {fileID: 0}
   bedCol: {fileID: 738246126}
+  messageText: {fileID: 0}
 --- !u!1 &1756740602
 GameObject:
   m_ObjectHideFlags: 0
@@ -10678,6 +10685,7 @@ MonoBehaviour:
   cameraControl: {fileID: 1739561126}
   cam: {fileID: 1422208283}
   childTransforms: []
+  playerLocation: {fileID: 1778727707}
 --- !u!1 &1842719334
 GameObject:
   m_ObjectHideFlags: 0
@@ -11266,6 +11274,7 @@ MonoBehaviour:
   mirrorMess: {fileID: 1685679866}
   inventory: {fileID: 1778727711}
   interactable: 1
+  messageText: {fileID: 0}
 --- !u!135 &1867838319
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11356,6 +11365,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6971571394025640556, guid: 6c51860e802638d47afe84e910244b68, type: 3}
+      propertyPath: m_Name
+      value: Crack in the wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6971571394025640556, guid: 6c51860e802638d47afe84e910244b68, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -11421,6 +11434,7 @@ MonoBehaviour:
   crack: {fileID: 1876238620}
   inventory: {fileID: 1778727711}
   uIManager: {fileID: 1296636135}
+  messageText: {fileID: 0}
 --- !u!1 &1891881652
 GameObject:
   m_ObjectHideFlags: 0
