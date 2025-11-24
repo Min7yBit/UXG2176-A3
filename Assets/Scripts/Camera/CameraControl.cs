@@ -11,6 +11,7 @@ public class CameraControl : MonoBehaviour
     public Camera firstPersonCam;
     public Camera thirdPersonCam;
     public Camera activeFixedCam;
+    public Camera cellFixedCam;
 
     [Header("Camera Switch SFX")]
     public AudioSource audioSource;
@@ -38,7 +39,9 @@ public class CameraControl : MonoBehaviour
             SetCameraMode(CameraMode.ThirdPerson);
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            SetCameraMode(CameraMode.Fixed);
+        {
+            SwitchToFixedCamera(cellFixedCam);
+        }
     }
 
     public void SetCameraMode(CameraMode mode)

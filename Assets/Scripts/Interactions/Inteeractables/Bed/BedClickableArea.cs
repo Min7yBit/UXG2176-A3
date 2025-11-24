@@ -72,6 +72,7 @@ public class BedClickableArea : MonoBehaviour, IInteractable
     }
 
     public TextMeshProUGUI messageText;
+    public TextMeshProUGUI interactionPrompt;
 
     public void ShowMessage(string msg, float duration = 2f)
     {

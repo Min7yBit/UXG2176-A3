@@ -17,20 +17,20 @@ public class UIManager : MonoBehaviour
         // ESC behaviour: close inventory first, pause second
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-/*            if (inventory.activeSelf)
-            {
-                ToggleInventory();
-                return;
-            }*/
+            /*            if (inventory.activeSelf)
+                        {
+                            ToggleInventory();
+                            return;
+                        }*/
 
             TogglePauseMenu();
         }
 
-/*        // I key (only allowed when not paused)
-        if (Input.GetKeyDown(KeyCode.I) && !isPaused)
-        {
-            ToggleInventory();
-        }*/        
+        /*        // I key (only allowed when not paused)
+                if (Input.GetKeyDown(KeyCode.I) && !isPaused)
+                {
+                    ToggleInventory();
+                }*/
 
     }
 
@@ -62,19 +62,13 @@ public class UIManager : MonoBehaviour
         hintsFound.GetComponentInChildren<TMP_Text>().text = $"Hints Found: {hintsCount}/3";
     }
 
-    /*    public void ToggleInventory()
+    public void SetGameTime(bool active)
+    {
+        if (active)
         {
-            bool newState = !inventory.activeSelf;
-
-            inventory.SetActive(newState);
-
-            Cursor.lockState = newState ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = newState || isPaused;
-
-            if (newState)
             {
-                playerInventory.ResetUI();
-                //combineSystem.ResetCombineSystem();
+                Time.timeScale = active ? 1 : 0;
             }
-        }*/
+        }
+    }
 }
