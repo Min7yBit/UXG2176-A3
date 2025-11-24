@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bed : MonoBehaviour, IInteractable
@@ -18,6 +19,7 @@ public class Bed : MonoBehaviour, IInteractable
     [Range(0f, 2f)] public float bedEnterVolume = 1f;
 
     private bool interactable = true;
+    private bool mouseOver = false;
     private PlayerMovement playerMovement;
     [SerializeField] private List<Transform> childTransforms;
     [SerializeField] private Transform playerLocation;
@@ -31,9 +33,19 @@ public class Bed : MonoBehaviour, IInteractable
     {
         return transform;
     }
-
+    private void OnMouseEnter()
+    {
+        mouseOver = true;
+    }
+    private void OnMouseExit()
+    {
+        mouseOver = false;
+    }
     public void OnInteract(in PlayerMovement playerMovement)
     {
+        if (!mouseOver) return;
+
+        GetComponent<Collider>().enabled = false;
         //  play bed-enter sound when clicking into bed
         PlayBedEnterSFX();
 
@@ -62,6 +74,7 @@ public class Bed : MonoBehaviour, IInteractable
         {
             if (Input.GetKeyDown(KeyCode.B))
             {
+                GetComponent<Collider>().enabled = true;
                 InInteract = false;
                 DisableChildInteraction();
 

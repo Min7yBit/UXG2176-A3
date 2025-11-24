@@ -21,6 +21,7 @@ public class Tray : MonoBehaviour, IInteractable
     [Range(0f, 2f)] public float trayOpenVolume = 1f;
 
     private bool interactable = true;
+    private bool mouseOver = false;
     private PlayerMovement playerMovement;
     [SerializeField] private List<Transform> childTransforms;
 
@@ -33,9 +34,18 @@ public class Tray : MonoBehaviour, IInteractable
     {
         return transform;
     }
-
+    private void OnMouseEnter()
+    {
+        mouseOver = true;
+    }
+    private void OnMouseExit()
+    {
+        mouseOver = false;
+    }
     public void OnInteract(in PlayerMovement playerMovement)
     {
+        if (!mouseOver) return;
+
         //  PLAY INTERACTION SFX
         PlayTraySFX();
 

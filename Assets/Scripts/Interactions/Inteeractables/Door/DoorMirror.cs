@@ -36,7 +36,7 @@ public class DoorMirror : MonoBehaviour, IInteractable
     {
         if (InInteract)
         {
-            if (Input.GetKeyDown(KeyCode.L))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 winCondition.allowInteract = false;
                 winCondition.ResetAllCombinations();

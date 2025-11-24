@@ -50,10 +50,7 @@ public class Mirror : MonoBehaviour, IInteractable
 
     public void OnInteract(in PlayerMovement playerMovement)
     {
-        Debug.Log("Attempting to interact with " + name);
-
-
-        Debug.Log("Interacted with " + name);
+        if (!mouseOver) return;
 
         if (inventory.ContainsItem(itemName) && shardItem != null) // has bed leg, can break
         {
