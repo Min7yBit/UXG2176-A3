@@ -51,8 +51,7 @@ public class Mirror : MonoBehaviour, IInteractable
     public void OnInteract(in PlayerMovement playerMovement)
     {
         Debug.Log("Attempting to interact with " + name);
-        if (!mouseOver)
-            return;
+
 
         Debug.Log("Interacted with " + name);
 

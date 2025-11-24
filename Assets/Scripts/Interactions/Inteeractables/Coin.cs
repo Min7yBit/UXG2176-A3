@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TestInteractable : MonoBehaviour, IInteractable
+public class Coin : MonoBehaviour, IInteractable
 {
     public string Name => name;
 
